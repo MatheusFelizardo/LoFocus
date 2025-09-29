@@ -31,10 +31,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-howler": "^5.2.3",
     "prisma": "^6.16.2",
     "tailwindcss": "^4",
     "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }
-
