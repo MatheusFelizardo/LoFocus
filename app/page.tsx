@@ -33,14 +33,18 @@ export default function HomePage() {
   return (
     <>
       <div className="lofocus min-h-dvh flex flex-col">
+        <div className="sr-only">
+          <h1>LoFocus — Pomodoro Timer with Lo-Fi Music</h1>
+        </div>
         <header className="flex items-center justify-between p-4 ">
           <div>
             <Image
               src="/logo.svg"
-              alt="Logo"
+              alt="LoFocus logo"
               width={150}
               height={50}
               className="w-[120px]"
+              arial-label="LoFocus Logo"
             />
           </div>
           <AccountMenu />

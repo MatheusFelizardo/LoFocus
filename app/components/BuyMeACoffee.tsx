@@ -36,10 +36,7 @@ const BuyMeACoffee = () => {
             rel="noopener noreferrer"
             className=" text-yellow-500 rounded-lg font-bold"
           >
-            <span className="text-xs hover:underline">
-              Support me with a Coffee
-            </span>{" "}
-            ☕
+            <span className="text-xs hover:underline">Support LoFocus</span> ☕
           </a>
         </Typography>
       </Box>

@@ -109,7 +109,7 @@ const Pomodoro = () => {
   }, [configuration]);
 
   if (isLoading || configuration.timers === null || timer === null) {
-    return <div>Carregando...</div>;
+    return <div>Loading...</div>;
   }
 
   const startTimer = () => {
