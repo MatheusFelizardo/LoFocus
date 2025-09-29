@@ -5,7 +5,7 @@ type Track = {
   url: string;
   type: "calm" | "upbeat";
 };
-export const BUCKET_URL = "http://www.lofocus.app";
+export const BUCKET_URL = "https://media.lofocus.app";
 export const tracks: Track[] = [
   {
     id: 1,
