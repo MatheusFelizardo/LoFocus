@@ -45,10 +45,12 @@ export default function HomePage() {
           </div>
           <AccountMenu />
         </header>
-        <main className="flex flex-col items-center justify-between p-4 relative flex-1">
+        <main className="flex flex-col items-center justify-between px-4 py-2 relative flex-1">
           <Pomodoro />
-          <Playlist />
-          <BuyMeACoffee />
+          <div className="flex flex-col gap-1 w-full">
+            <Playlist />
+            <BuyMeACoffee />
+          </div>
         </main>
       </div>
     </>

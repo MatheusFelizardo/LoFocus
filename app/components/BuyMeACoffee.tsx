@@ -1,42 +1,36 @@
-import { Button } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Typography } from "@mui/material";
+import React from "react";
 
 const BuyMeACoffee = () => {
-  const [isVisible, setIsVisible] = useState(true);
-
   return (
-    <div className={isVisible ? "" : "fixed bottom-4 right-4"}>
-      {isVisible ? (
+    <Box className="flex justify-between items-center w-full">
+      <Box className="text-xs">
+        <span>Powered by </span>
         <a
-          href="https://buymeacoffee.com/matheusfelizardo"
+          href="https://www.linkedin.com/in/matheus-felizardo/"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ textDecoration: "none" }}
         >
-          <div className="inline-flex items-center bg-yellow-400 text-black px-4 py-2 rounded-lg font-bold ml-6">
-            <span className="mr-2 text-xl">☕</span>
-            <span className="text-xs">Support me with a Coffee</span>
-          </div>
+          Matheus Felizardo
         </a>
-      ) : // <a
-      //   href="https://buymeacoffee.com/matheusfelizardo"
-      //   target="_blank"
-      //   rel="noopener noreferrer"
-      //   className="inline-flex items-center bg-yellow-400 text-black px-4 py-2 rounded-full w-10 h-10 justify-center font-bold fixed bottom-0 right-0"
-      // >
-      //   <span className="text-2xl">☕</span>
-      // </a>
-      null}
-      {isVisible && (
-        <Button
-          size="small"
-          onClick={() => setIsVisible(!isVisible)}
-          className="text-xs text-gray-400 ml-1 "
-        >
-          Close
-        </Button>
-      )}
-    </div>
+      </Box>
+      <Box className="flex items-center ">
+        <Typography variant="h6" color="white" gutterBottom className="text-xs">
+          <span>Enjoying the app? </span>
+          <a
+            href="https://buymeacoffee.com/matheusfelizardo"
+            target="_blank"
+            rel="noopener noreferrer"
+            className=" text-yellow-500 rounded-lg font-bold"
+          >
+            <span className="text-xs hover:underline">
+              Support me with a Coffee
+            </span>{" "}
+            ☕
+          </a>
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 
