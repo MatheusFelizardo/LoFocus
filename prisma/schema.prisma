@@ -9,13 +9,17 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
+  id            String            @id @default(cuid())
   name          String?
-  email         String?  @unique
+  email         String?           @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  profile       UserProfile?
+  tags          Tag[]
+  pomodoros     PomodoroSession[]
+  playlist      Playlist[]
 }
 
 model Account {
@@ -52,4 +56,61 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model UserProfile {
+  id                String @id @default(cuid())
+  userId            String @unique
+  defaultPomodoro   Int    @default(25)
+  defaultShortBreak Int    @default(5)
+  defaultLongBreak  Int    @default(15)
+  longBreakInterval Int    @default(4)
+  defaultAlarmSound String @default("bell")
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id     String @id @default(cuid())
+  name   String
+  userId String
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pomodoros PomodoroSession[]
+
+  @@unique([userId, name])
+}
+
+model PomodoroSession {
+  id        String    @id @default(cuid())
+  userId    String
+  tagId     String?
+  name      String?
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+
+  focusDuration Int
+  shortBreak    Int
+  longBreak     Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tag  Tag? @relation(fields: [tagId], references: [id])
+}
+
+enum PlaylistType {
+  LOFI
+  AMBIENT
+}
+
+model Playlist {
+  id        String       @id @default(cuid())
+  title     String
+  type      PlaylistType
+  url       String
+  isPublic  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+
+  creator   String
+  admin     User   @relation(fields: [creator], references: [id], onDelete: Cascade)
 }
