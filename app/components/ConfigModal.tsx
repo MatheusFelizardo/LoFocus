@@ -27,6 +27,7 @@ import {
   PomodoroTypeEnum,
   usePomodoroStore,
 } from "../stores/usePomodoro";
+import { BUCKET_URL } from "./Playlist/track";
 
 export const soundOptions = [
   { label: "Bell", value: "bell" },
@@ -189,7 +190,9 @@ const ConfigModal = ({
                       }
 
                       if (audio) audio.pause();
-                      const a = new Audio(`/audio/alarm/${option.value}.mp3`);
+                      const a = new Audio(
+                        `${BUCKET_URL}/alarm/${option.value}.mp3`
+                      );
                       a.loop = true;
                       a.play();
 

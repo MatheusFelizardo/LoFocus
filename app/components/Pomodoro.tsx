@@ -12,6 +12,7 @@ import {
 } from "../stores/usePomodoro";
 import { Button, IconButton, Typography } from "@mui/material";
 import { Pause, PlayArrow, Stop } from "@mui/icons-material";
+import { BUCKET_URL } from "./Playlist/track";
 
 function a11yProps(index: number) {
   return {
@@ -37,7 +38,7 @@ const Clock = ({ time }: { time: number }) => (
 const Pomodoro = () => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const audio = new Audio("/audio/alarm/bell.mp3");
+  const audio = new Audio(`${BUCKET_URL}/alarm/bell.mp3`);
   const AMOUNT_BEFORE_LONG_BREAK = 4;
 
   const {
