@@ -9,6 +9,7 @@ import Pomodoro from "./components/Pomodoro";
 import Head from "next/head";
 import Playlist from "./components/Playlist/Playlist";
 import BuyMeACoffee from "./components/BuyMeACoffee";
+import TaskRegister from "./components/TaskRegister";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
@@ -47,6 +48,7 @@ export default function HomePage() {
               arial-label="LoFocus Logo"
             />
           </div>
+          <TaskRegister />
           <AccountMenu />
         </header>
         <main className="flex flex-col items-center justify-between px-4 py-2 relative flex-1">

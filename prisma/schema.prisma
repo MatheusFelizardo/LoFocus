@@ -14,11 +14,10 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  sessions      Session[]
-  profile       UserProfile?
-  tags          Tag[]
   pomodoros     PomodoroSession[]
-  playlist      Playlist[]
+  sessions      Session[]
+  tags          Tag[]
+  profile       UserProfile?
 }
 
 model Account {
@@ -34,8 +33,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -45,8 +43,7 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -58,58 +55,40 @@ model VerificationToken {
 }
 
 model UserProfile {
-  id                String @id @default(cuid())
-  userId            String @unique
-  defaultPomodoro   Int    @default(25)
-  defaultShortBreak Int    @default(5)
-  defaultLongBreak  Int    @default(15)
-  longBreakInterval Int    @default(4)
-  defaultAlarmSound String @default("bell")
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  defaultPomodoro   Int      @default(25)
+  defaultShortBreak Int      @default(5)
+  defaultLongBreak  Int      @default(15)
+  longBreakInterval Int      @default(4)
+  defaultAlarmSound String   @default("bell")
   updatedAt         DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Tag {
-  id     String @id @default(cuid())
-  name   String
-  userId String
-
-  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  pomodoros PomodoroSession[]
-
-  @@unique([userId, name])
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PomodoroSession {
-  id        String    @id @default(cuid())
-  userId    String
-  tagId     String?
-  name      String?
-  startedAt DateTime  @default(now())
-  endedAt   DateTime?
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  title          String
+  focusDuration  Int
+  shortBreak     Int
+  longBreak      Int
+  expectedCycles Int
+  cycles         Int      @default(0)
+  startTime      DateTime @default(now())
+  endTime        DateTime?
+  isCompleted    Boolean  @default(false)
 
-  focusDuration Int
-  shortBreak    Int
-  longBreak     Int
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tag  Tag? @relation(fields: [tagId], references: [id])
+  tags           Tag[]    @relation("PomodoroTags")
 }
 
-enum PlaylistType {
-  LOFI
-  AMBIENT
+model Tag {
+  id      String             @id @default(cuid())
+  name    String
+  userId  String
+  user    User               @relation(fields: [userId], references: [id])
+
+  sessions PomodoroSession[] @relation("PomodoroTags")
 }
 
-model Playlist {
-  id        String       @id @default(cuid())
-  title     String
-  type      PlaylistType
-  url       String
-  isPublic  Boolean      @default(true)
-  createdAt DateTime     @default(now())
-
-  creator   String
-  admin     User   @relation(fields: [creator], references: [id], onDelete: Cascade)
-}

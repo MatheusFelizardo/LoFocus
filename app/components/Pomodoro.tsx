@@ -13,6 +13,7 @@ import {
 import { Button, IconButton, Typography } from "@mui/material";
 import { Pause, PlayArrow, Stop } from "@mui/icons-material";
 import { BUCKET_URL } from "./Playlist/track";
+import { useSessionStore } from "../stores/useSessionStore";
 
 function a11yProps(index: number) {
   return {
@@ -57,6 +58,8 @@ const Pomodoro = () => {
     configuration,
     setConfiguration,
   } = usePomodoroStore();
+
+  const { incrementCycle } = useSessionStore();
 
   useEffect(() => {
     async function loadTimers() {
@@ -115,16 +118,16 @@ const Pomodoro = () => {
     if (isLoading || timer === null) return;
 
     setStatus(PomodoroStateEnum.PLAYING);
-    const log = {
+    addLog({
       action: PomodoroStateEnum.PLAYING,
       timestamp: new Date(),
       timeLeft: timer,
       activity: type,
-    };
-    console.log(log);
-    addLog(log);
+    });
 
     const interval = setInterval(() => {
+      let shouldIncrement = false;
+
       usePomodoroStore.setState((state) => {
         if (state.timer === null || state.configuration.timers === null)
           return state;
@@ -157,6 +160,7 @@ const Pomodoro = () => {
 
         if (state.type === PomodoroTypeEnum.POMODORO) {
           newExecutionCounter += 1;
+          shouldIncrement = true;
           if (newExecutionCounter < AMOUNT_BEFORE_LONG_BREAK) {
             newType = PomodoroTypeEnum.SHORT_BREAK;
             setValue(1);
@@ -179,6 +183,10 @@ const Pomodoro = () => {
           counter: null,
         };
       });
+
+      if (shouldIncrement) {
+        useSessionStore.getState().incrementCycle();
+      }
     }, 1000);
 
     setCounter(interval);

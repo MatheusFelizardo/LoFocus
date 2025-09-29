@@ -34,6 +34,7 @@ export type PomodoroConfiguration = {
     value: string;
   };
 };
+
 type PomodoroState = {
   executionCounter: number;
   status: PomodoroStateEnum;
