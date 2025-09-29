@@ -37,7 +37,9 @@ const Playlist = () => {
     if (howlerRef.current) {
       const sound = howlerRef.current as any;
       if (sound?.howler) {
-        setDuration(sound.howler.duration());
+        sound.howler.once("load", () => {
+          setDuration(sound.howler.duration());
+        });
       }
     }
   }, [currentTrack]);
@@ -61,11 +63,15 @@ const Playlist = () => {
 
   const playNext = () => {
     const list = tracks.filter((t) => t.type === playlistType);
+    setSeek(0);
+    setProgress(0);
     setCurrentIndex((prev) => (prev + 1) % list.length);
   };
 
   const playPrev = () => {
     const list = tracks.filter((t) => t.type === playlistType);
+    setSeek(0);
+    setProgress(0);
     setCurrentIndex((prev) => (prev - 1 + list.length) % list.length);
   };
 
@@ -188,6 +194,13 @@ const Playlist = () => {
           className="absolute left-0 -bottom-2 text-gray-400"
         >
           {new Date(seek * 1000).toISOString().substring(14, 19)}
+        </Typography>
+
+        <Typography
+          variant="caption"
+          className="absolute right-0 -bottom-2 text-gray-400"
+        >
+          {new Date(duration * 1000).toISOString().substring(14, 19)}
         </Typography>
 
         <div className="absolute right-0 -top-6 flex items-center gap-4">

@@ -14,6 +14,19 @@ const BuyMeACoffee = () => {
           Matheus Felizardo
         </a>
       </Box>
+
+      <Box>
+        <Typography className="text-white text-xs">
+          <a
+            href="mailto:matheus.felizardo2@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500"
+          >
+            Click here for songs/general suggestions
+          </a>
+        </Typography>
+      </Box>
       <Box className="flex items-center ">
         <Typography variant="h6" color="white" gutterBottom className="text-xs">
           <span>Enjoying the app? </span>

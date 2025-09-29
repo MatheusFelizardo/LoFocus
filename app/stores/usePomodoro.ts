@@ -71,7 +71,7 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
   },
   addLog: (entry) => set((state) => ({ logs: [...state.logs, entry] })),
   setStatus: (status) => set(() => ({ status })),
-  setTimer: (time) => set(() => ({ timer: time })),
+  setTimer: (time) => set(() => ({ timer: time * 60 })),
   setType: (type) => set(() => ({ type })),
   setCounter: (counter) => set(() => ({ counter })),
   increaseExecutionCounter: () =>

@@ -88,12 +88,10 @@ const ConfigModal = ({
                 ...newConfig,
                 timers: {
                   [PomodoroTypeEnum.SHORT_BREAK]:
-                    (newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 5) *
-                    60,
+                    newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 5,
                   [PomodoroTypeEnum.LONG_BREAK]:
-                    (newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 15) *
-                    60,
-                  [PomodoroTypeEnum.POMODORO]: parseInt(e.target.value) * 60,
+                    newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 15,
+                  [PomodoroTypeEnum.POMODORO]: parseInt(e.target.value),
                 },
               });
             }}
@@ -109,11 +107,10 @@ const ConfigModal = ({
                 ...newConfig,
                 timers: {
                   [PomodoroTypeEnum.POMODORO]:
-                    (newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 25) * 60,
+                    newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 25,
                   [PomodoroTypeEnum.LONG_BREAK]:
-                    (newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 15) *
-                    60,
-                  [PomodoroTypeEnum.SHORT_BREAK]: parseInt(e.target.value) * 60,
+                    newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 15,
+                  [PomodoroTypeEnum.SHORT_BREAK]: parseInt(e.target.value),
                 },
               });
             }}
@@ -129,11 +126,10 @@ const ConfigModal = ({
                 ...newConfig,
                 timers: {
                   [PomodoroTypeEnum.POMODORO]:
-                    (newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 25) * 60,
+                    newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 25,
                   [PomodoroTypeEnum.SHORT_BREAK]:
-                    (newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 5) *
-                    60,
-                  [PomodoroTypeEnum.LONG_BREAK]: parseInt(e.target.value) * 60,
+                    newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 5,
+                  [PomodoroTypeEnum.LONG_BREAK]: parseInt(e.target.value),
                 },
               });
             }}

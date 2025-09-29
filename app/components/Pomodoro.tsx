@@ -67,9 +67,9 @@ const Pomodoro = () => {
 
       const config = {
         timers: {
-          [PomodoroTypeEnum.POMODORO]: 25 * 60,
-          [PomodoroTypeEnum.SHORT_BREAK]: 5 * 60,
-          [PomodoroTypeEnum.LONG_BREAK]: 15 * 60,
+          [PomodoroTypeEnum.POMODORO]: 25,
+          [PomodoroTypeEnum.SHORT_BREAK]: 5,
+          [PomodoroTypeEnum.LONG_BREAK]: 15,
         },
         longBreakInterval: 4,
         alarmSound: {

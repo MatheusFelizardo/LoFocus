@@ -40,7 +40,7 @@ export const tracks: Track[] = [
     title: "Contact High",
     artist: "RKVC",
     url: `${BUCKET_URL}/playlists/calm/Contact High - RKVC.mp3`,
-    type: "calm",
+    type: "upbeat",
   },
   {
     id: 6,
@@ -54,7 +54,7 @@ export const tracks: Track[] = [
     title: "Drop Of A Hat",
     artist: "The Grey Room and Density & Time",
     url: `${BUCKET_URL}/playlists/calm/Drop Of A Hat - The Grey Room _ Density & Time.mp3`,
-    type: "calm",
+    type: "upbeat",
   },
   {
     id: 8,
@@ -89,7 +89,7 @@ export const tracks: Track[] = [
     title: "Misdirection",
     artist: "The Grey Room and Density & Time",
     url: `${BUCKET_URL}/playlists/calm/Misdirection - The Grey Room _ Density & Time.mp3`,
-    type: "calm",
+    type: "upbeat",
   },
   {
     id: 13,
@@ -103,7 +103,7 @@ export const tracks: Track[] = [
     title: "Never Surrender",
     artist: "Anno Domini Beats",
     url: `${BUCKET_URL}/playlists/calm/Never Surrender - Anno Domini Beats.mp3`,
-    type: "calm",
+    type: "upbeat",
   },
   {
     id: 15,
