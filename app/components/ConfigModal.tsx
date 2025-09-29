@@ -32,6 +32,7 @@ import { BUCKET_URL } from "./Playlist/track";
 export const soundOptions = [
   { label: "Bell", value: "bell" },
   { label: "Digital Clock", value: "digital-clock" },
+  { label: "Kitchen Timer", value: "kitchen" },
 ];
 
 const ConfigModal = ({
@@ -82,7 +83,7 @@ const ConfigModal = ({
             margin="normal"
             label="Pomodoro"
             type="number"
-            defaultValue={configuration.timers?.[PomodoroTypeEnum.POMODORO]}
+            defaultValue={newConfig.timers?.[PomodoroTypeEnum.POMODORO]}
             onChange={(e) => {
               setNewConfig({
                 ...newConfig,
@@ -101,7 +102,7 @@ const ConfigModal = ({
             margin="normal"
             label="Short break"
             type="number"
-            defaultValue={configuration.timers?.[PomodoroTypeEnum.SHORT_BREAK]}
+            defaultValue={newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK]}
             onChange={(e) => {
               setNewConfig({
                 ...newConfig,
@@ -120,7 +121,7 @@ const ConfigModal = ({
             margin="normal"
             label="Long break"
             type="number"
-            defaultValue={configuration.timers?.[PomodoroTypeEnum.LONG_BREAK]}
+            defaultValue={newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK]}
             onChange={(e) => {
               setNewConfig({
                 ...newConfig,
@@ -139,15 +140,19 @@ const ConfigModal = ({
           <TextField
             select
             label="Alarm sound"
-            value={configuration.alarmSound.value}
+            value={newConfig.alarmSound.value}
             onChange={(e) => {
+              const selected = soundOptions.find(
+                (opt) => opt.value === e.target.value
+              );
+              console.log(selected);
+              console.log(e.target.value);
+              if (!selected) return;
               setNewConfig({
                 ...newConfig,
                 alarmSound: {
-                  label:
-                    soundOptions.find((opt) => opt.value === e.target.value)
-                      ?.label || "",
-                  value: e.target.value,
+                  label: selected.label,
+                  value: selected.value,
                 },
               });
             }}
@@ -189,11 +194,15 @@ const ConfigModal = ({
                       const a = new Audio(
                         `${BUCKET_URL}/alarm/${option.value}.mp3`
                       );
-                      a.loop = true;
                       a.play();
 
                       setAudio(a);
                       setCurrentSound(option.value);
+
+                      a.addEventListener("ended", () => {
+                        setCurrentSound(null);
+                        setAudio(null);
+                      });
                     }}
                   >
                     {isCurrent && audio && !audio.paused ? (
@@ -225,7 +234,7 @@ const ConfigModal = ({
               </span>
             }
             type="number"
-            defaultValue={configuration.longBreakInterval}
+            defaultValue={newConfig.longBreakInterval}
             onChange={(e) =>
               setNewConfig({
                 ...newConfig,
@@ -236,7 +245,14 @@ const ConfigModal = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setShowConfig(false)}>Cancel</Button>
+        <Button
+          onClick={() => {
+            setShowConfig(false);
+            setNewConfig(configuration);
+          }}
+        >
+          Cancel
+        </Button>
         <Button
           variant="contained"
           onClick={() => {

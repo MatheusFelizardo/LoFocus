@@ -38,7 +38,6 @@ const Clock = ({ time }: { time: number }) => (
 const Pomodoro = () => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const audio = new Audio(`${BUCKET_URL}/alarm/bell.mp3`);
   const AMOUNT_BEFORE_LONG_BREAK = 4;
 
   const {
@@ -144,6 +143,9 @@ const Pomodoro = () => {
           activity: state.type,
         });
 
+        const audio = new Audio(
+          `${BUCKET_URL}/alarm/${state.configuration.alarmSound.value}.mp3`
+        );
         audio.play();
         setTimeout(() => {
           audio.pause();
