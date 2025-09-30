@@ -88,7 +88,22 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
       const data = await res.json();
 
       if (!data) {
-        return set(() => ({ isLoading: false }));
+        const configuration = {
+          timers: {
+            [PomodoroTypeEnum.POMODORO]: 25,
+            [PomodoroTypeEnum.SHORT_BREAK]: 5,
+            [PomodoroTypeEnum.LONG_BREAK]: 15,
+          },
+          longBreakInterval: 4,
+          alarmSound: { label: "Bell", value: "bell" },
+        };
+        await usePomodoroStore.getState().saveProfile(configuration);
+        set(() => ({
+          configuration,
+          timer: 25 * 60,
+          isLoading: false,
+        }));
+        return;
       }
 
       const configuration = {

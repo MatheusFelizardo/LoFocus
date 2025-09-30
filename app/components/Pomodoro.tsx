@@ -144,7 +144,7 @@ const Pomodoro = () => {
         return {
           ...state,
           type: newType,
-          timer: state.configuration.timers[newType],
+          timer: state.configuration.timers[newType] * 60,
           executionCounter: newExecutionCounter,
           status: PomodoroStateEnum.STOPPED,
           counter: null,
