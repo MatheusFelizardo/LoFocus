@@ -31,6 +31,13 @@ export default function HomePage() {
     loadData();
   }, []);
 
+  if (status === "unauthenticated") {
+    if (typeof window !== "undefined") {
+      window.location.href = "/auth/signin";
+    }
+    return null;
+  }
+
   if (status === "loading" || isLoading) {
     return (
       <main className="min-h-dvh flex items-center justify-center p-4">
@@ -49,13 +56,6 @@ export default function HomePage() {
         </Typography>
       </main>
     );
-  }
-
-  if (status === "unauthenticated") {
-    if (typeof window !== "undefined") {
-      window.location.href = "/auth/signin";
-    }
-    return null;
   }
 
   return (
