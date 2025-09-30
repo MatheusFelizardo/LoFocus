@@ -1,37 +1,11 @@
 import type { Metadata } from "next";
 import Providers from "./providers";
 import "./globals.css";
+import Playlist from "./components/Playlist/Playlist";
+import BuyMeACoffee from "./components/BuyMeACoffee";
 
 export const metadata: Metadata = {
-  title: "LoFocus — Pomodoro Timer with Lo-Fi Music",
-  description:
-    "Stay productive and relaxed with LoFocus — a minimal Pomodoro timer combined with Lo-Fi playlists.",
-
-  keywords: [
-    "Pomodoro timer",
-    "LoFi music",
-    "productivity app",
-    "focus timer",
-    "study timer",
-    "work timer",
-  ],
-
-  openGraph: {
-    title: "LoFocus — Pomodoro Timer with Lo-Fi Music",
-    description:
-      "Stay focused and boost your productivity with LoFocus, a Pomodoro timer integrated with relaxing Lo-Fi playlists.",
-    url: "https://lofocus.app/",
-    type: "website",
-    images: "https://lofocus.app/og-image.png",
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: "LoFocus — Pomodoro Timer with Lo-Fi Music",
-    description:
-      "Stay productive and relaxed with LoFocus — a minimal Pomodoro timer combined with Lo-Fi playlists.",
-    images: "https://lofocus.app/og-image.png",
-  },
+  /* ... */
 };
 
 export default function RootLayout({
@@ -42,7 +16,18 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="min-h-dvh flex flex-col justify-between">
+            <div className="flex-1">{children}</div>
+
+            <div className="w-full bg-black">
+              <div className="flex flex-col gap-1 w-full">
+                <Playlist />
+                <BuyMeACoffee />
+              </div>
+            </div>
+          </div>
+        </Providers>
       </body>
     </html>
   );

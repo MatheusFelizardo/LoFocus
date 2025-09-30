@@ -13,6 +13,8 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import ConfigModal from "./ConfigModal";
 import { usePomodoroStore } from "../stores/usePomodoro";
+import { History } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
 const CustomAvatar = () => {
   const { data: session } = useSession();
@@ -34,6 +36,7 @@ const CustomAvatar = () => {
 };
 
 export default function AccountMenu() {
+  const router = useRouter();
   const { data: session, status } = useSession();
   const { isLoading } = usePomodoroStore();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -103,6 +106,17 @@ export default function AccountMenu() {
           <Avatar /> My account
         </MenuItem>
         <Divider /> */}
+
+        <MenuItem
+          onClick={() => {
+            router.push("/dashboard");
+          }}
+        >
+          <ListItemIcon>
+            <History fontSize="small" />
+          </ListItemIcon>
+          Activity
+        </MenuItem>
 
         <MenuItem
           onClick={() => {
