@@ -12,6 +12,7 @@ import Logout from "@mui/icons-material/Logout";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import ConfigModal from "./ConfigModal";
+import { usePomodoroStore } from "../stores/usePomodoro";
 
 const CustomAvatar = () => {
   const { data: session } = useSession();
@@ -34,6 +35,7 @@ const CustomAvatar = () => {
 
 export default function AccountMenu() {
   const { data: session, status } = useSession();
+  const { isLoading } = usePomodoroStore();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -121,7 +123,9 @@ export default function AccountMenu() {
         </MenuItem>
       </Menu>
 
-      <ConfigModal showConfig={showConfig} setShowConfig={setShowConfig} />
+      {!isLoading && (
+        <ConfigModal showConfig={showConfig} setShowConfig={setShowConfig} />
+      )}
     </React.Fragment>
   );
 }

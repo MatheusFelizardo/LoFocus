@@ -16,32 +16,43 @@ import { PomodoroTypeEnum, usePomodoroStore } from "../stores/usePomodoro";
 import { TagSelector } from "./TagSelector";
 import { useSessionStore } from "../stores/useSessionStore";
 import { Tag, useTagStore } from "../stores/useTagsStore";
+import toast from "react-hot-toast";
 
 const TaskRegister = () => {
   const { configuration } = usePomodoroStore();
   const { startSession, current } = useSessionStore();
   const { tags } = useTagStore();
-  const [isRegistering, setIsRegistering] = useState(true);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const [session, setSession] = useState({
     title: "",
     tags: [] as Tag[],
-    focusDuration: configuration.timers?.[PomodoroTypeEnum.POMODORO] || 25,
-    longBreakDuration:
-      configuration.timers?.[PomodoroTypeEnum.LONG_BREAK] || 15,
-    shortBreakDuration:
-      configuration.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 5,
+    focusDuration: configuration.timers?.[PomodoroTypeEnum.POMODORO],
+    longBreakDuration: configuration.timers?.[PomodoroTypeEnum.LONG_BREAK],
+    shortBreakDuration: configuration.timers?.[PomodoroTypeEnum.SHORT_BREAK],
     cycles: 0,
     expectedCycles: 4,
   });
 
   const handleSave = async () => {
+    const isValid =
+      session.title.trim().length > 0 &&
+      session.focusDuration! > 0 &&
+      session.shortBreakDuration! > 0 &&
+      session.longBreakDuration! > 0 &&
+      session.expectedCycles! > 0;
+
+    if (!isValid) {
+      toast.error("Please fill all fields correctly.");
+      return;
+    }
+
     await startSession({
       title: session.title,
-      focusDuration: session.focusDuration,
-      shortBreakDuration: session.shortBreakDuration,
-      longBreakDuration: session.longBreakDuration,
-      expectedCycles: session.expectedCycles,
+      focusDuration: session.focusDuration!,
+      shortBreakDuration: session.shortBreakDuration!,
+      longBreakDuration: session.longBreakDuration!,
+      expectedCycles: session.expectedCycles!,
       tagIds: session.tags.map((t) => t.id!).filter(Boolean),
     });
 
@@ -54,7 +65,7 @@ const TaskRegister = () => {
 
   return (
     <>
-      {current && (
+      {current ? (
         <Box className="flex items-center gap-4">
           <Typography className="text-sm text-gray-300">
             {`${current.cycles}|${current.expectedCycles}`} {current.title}
@@ -75,6 +86,10 @@ const TaskRegister = () => {
               })}
           </Box>
         </Box>
+      ) : (
+        <Button variant="outlined" onClick={() => setIsRegistering(true)}>
+          New Session
+        </Button>
       )}
 
       <Dialog
@@ -166,6 +181,7 @@ const TaskRegister = () => {
         </DialogContent>
 
         <DialogActions>
+          <Button onClick={() => setIsRegistering(false)}>Close</Button>
           <Button variant="contained" onClick={handleSave}>
             Save
           </Button>

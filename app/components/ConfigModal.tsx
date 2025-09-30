@@ -28,6 +28,7 @@ import {
   usePomodoroStore,
 } from "../stores/usePomodoro";
 import { BUCKET_URL } from "./Playlist/track";
+import toast from "react-hot-toast";
 
 export const soundOptions = [
   { label: "Bell", value: "bell" },
@@ -42,24 +43,28 @@ const ConfigModal = ({
   showConfig: boolean;
   setShowConfig: (show: boolean) => void;
 }) => {
-  const { configuration, setConfiguration } = usePomodoroStore();
-  const { data: session } = useSession();
+  const { configuration, saveProfile } = usePomodoroStore();
 
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [currentSound, setCurrentSound] = React.useState<string | null>(null);
 
-  const [newConfig, setNewConfig] = useState<PomodoroConfiguration>({
-    timers: {
-      [PomodoroTypeEnum.POMODORO]:
-        configuration.timers?.[PomodoroTypeEnum.POMODORO] || 25,
-      [PomodoroTypeEnum.SHORT_BREAK]:
-        configuration.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 5,
-      [PomodoroTypeEnum.LONG_BREAK]:
-        configuration.timers?.[PomodoroTypeEnum.LONG_BREAK] || 15,
-    },
-    longBreakInterval: configuration.longBreakInterval || 4,
-    alarmSound: configuration.alarmSound || { label: "Bell", value: "bell" },
-  });
+  const [newConfig, setNewConfig] =
+    useState<PomodoroConfiguration>(configuration);
+
+  const handleSave = async () => {
+    const isValid =
+      (newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 0) > 0 &&
+      (newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 0) > 0 &&
+      (newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 0) > 0 &&
+      (newConfig.longBreakInterval || 0) > 0;
+    if (!isValid) {
+      toast.error("All fields must be greater than zero.");
+      return;
+    }
+
+    await saveProfile(newConfig);
+    setShowConfig(false);
+  };
 
   return (
     <Dialog
@@ -82,17 +87,20 @@ const ConfigModal = ({
             fullWidth
             margin="normal"
             label="Pomodoro"
-            type="number"
-            defaultValue={newConfig.timers?.[PomodoroTypeEnum.POMODORO]}
+            type="text"
+            value={newConfig.timers?.[PomodoroTypeEnum.POMODORO]}
             onChange={(e) => {
+              const onlyDigits = e.target.value.replace(/\D/g, "");
+              const value = onlyDigits === "" ? 0 : parseInt(onlyDigits, 10);
+
               setNewConfig({
                 ...newConfig,
                 timers: {
                   [PomodoroTypeEnum.SHORT_BREAK]:
-                    newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 5,
+                    newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 0,
                   [PomodoroTypeEnum.LONG_BREAK]:
-                    newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 15,
-                  [PomodoroTypeEnum.POMODORO]: parseInt(e.target.value),
+                    newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 0,
+                  [PomodoroTypeEnum.POMODORO]: value,
                 },
               });
             }}
@@ -101,17 +109,21 @@ const ConfigModal = ({
             fullWidth
             margin="normal"
             label="Short break"
-            type="number"
-            defaultValue={newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK]}
+            type="text"
+            value={newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK]}
             onChange={(e) => {
+              console.log(e.target.value);
+              const onlyDigits = e.target.value.replace(/\D/g, "");
+              const value = onlyDigits === "" ? 0 : parseInt(onlyDigits, 10);
+
               setNewConfig({
                 ...newConfig,
                 timers: {
                   [PomodoroTypeEnum.POMODORO]:
-                    newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 25,
+                    newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 0,
                   [PomodoroTypeEnum.LONG_BREAK]:
-                    newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 15,
-                  [PomodoroTypeEnum.SHORT_BREAK]: parseInt(e.target.value),
+                    newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK] || 0,
+                  [PomodoroTypeEnum.SHORT_BREAK]: value,
                 },
               });
             }}
@@ -120,17 +132,19 @@ const ConfigModal = ({
             fullWidth
             margin="normal"
             label="Long break"
-            type="number"
-            defaultValue={newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK]}
+            type="text"
+            value={newConfig.timers?.[PomodoroTypeEnum.LONG_BREAK]}
             onChange={(e) => {
+              const onlyDigits = e.target.value.replace(/\D/g, "");
+              const value = onlyDigits === "" ? 0 : parseInt(onlyDigits, 10);
               setNewConfig({
                 ...newConfig,
                 timers: {
                   [PomodoroTypeEnum.POMODORO]:
-                    newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 25,
+                    newConfig.timers?.[PomodoroTypeEnum.POMODORO] || 0,
                   [PomodoroTypeEnum.SHORT_BREAK]:
-                    newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 5,
-                  [PomodoroTypeEnum.LONG_BREAK]: parseInt(e.target.value),
+                    newConfig.timers?.[PomodoroTypeEnum.SHORT_BREAK] || 0,
+                  [PomodoroTypeEnum.LONG_BREAK]: value,
                 },
               });
             }}
@@ -233,14 +247,19 @@ const ConfigModal = ({
                 </Tooltip>
               </span>
             }
-            type="number"
-            defaultValue={newConfig.longBreakInterval}
-            onChange={(e) =>
+            type="text"
+            value={newConfig.longBreakInterval}
+            onChange={(e) => {
+              const onlyDigits = e.target.value.replace(/\D/g, "");
+              const value = onlyDigits === "" ? 0 : parseInt(onlyDigits, 10);
+              if (value < 1) {
+                toast.error("Long break interval must be at least 1");
+              }
               setNewConfig({
                 ...newConfig,
-                longBreakInterval: parseInt(e.target.value),
-              })
-            }
+                longBreakInterval: value,
+              });
+            }}
           />
         </Box>
       </DialogContent>
@@ -253,13 +272,7 @@ const ConfigModal = ({
         >
           Cancel
         </Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setConfiguration(newConfig);
-            setShowConfig(false);
-          }}
-        >
+        <Button variant="contained" onClick={handleSave}>
           Save
         </Button>
       </DialogActions>

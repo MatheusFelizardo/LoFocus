@@ -52,6 +52,8 @@ type PomodoroState = {
   isLoading: boolean;
   configuration: PomodoroConfiguration;
   setConfiguration: (config: PomodoroConfiguration) => void;
+  loadProfile: () => Promise<void>;
+  saveProfile: (newConfig: PomodoroConfiguration) => Promise<void>;
 };
 
 export const usePomodoroStore = create<PomodoroState>((set) => ({
@@ -79,4 +81,76 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
     set(({ executionCounter }) => ({ executionCounter: executionCounter + 1 })),
   resetExecutionCounter: () => set(() => ({ executionCounter: 0 })),
   setConfiguration: (config) => set(() => ({ configuration: config })),
+  loadProfile: async () => {
+    try {
+      const res = await fetch("/api/userProfile");
+      if (!res.ok) throw new Error("Failed to load profile");
+      const data = await res.json();
+
+      if (!data) {
+        return set(() => ({ isLoading: false }));
+      }
+
+      const configuration = {
+        timers: {
+          [PomodoroTypeEnum.POMODORO]: data.defaultPomodoro,
+          [PomodoroTypeEnum.SHORT_BREAK]: data.defaultShortBreak,
+          [PomodoroTypeEnum.LONG_BREAK]: data.defaultLongBreak,
+        },
+        longBreakInterval: data.longBreakInterval,
+        alarmSound: {
+          label:
+            data.defaultAlarmSound.charAt(0).toUpperCase() +
+            data.defaultAlarmSound.slice(1),
+          value: data.defaultAlarmSound,
+        },
+      };
+      console.log("Loaded configuration:", configuration);
+      set(() => ({
+        configuration,
+        timer: configuration.timers[PomodoroTypeEnum.POMODORO],
+        isLoading: false,
+      }));
+    } catch (error) {
+      console.error("Error loading profile:", error);
+    }
+  },
+  saveProfile: async (newConfig: PomodoroConfiguration) => {
+    try {
+      const config = newConfig;
+      if (!config.timers) throw new Error("No timers configured");
+      const res = await fetch("/api/userProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          defaultPomodoro: config.timers[PomodoroTypeEnum.POMODORO],
+          defaultShortBreak: config.timers[PomodoroTypeEnum.SHORT_BREAK],
+          defaultLongBreak: config.timers[PomodoroTypeEnum.LONG_BREAK],
+          longBreakInterval: config.longBreakInterval,
+          defaultAlarmSound: config.alarmSound.value,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to save profile");
+      const response = await res.json();
+
+      set(() => ({
+        configuration: {
+          longBreakInterval: response.longBreakInterval,
+          timers: {
+            [PomodoroTypeEnum.POMODORO]: response.defaultPomodoro,
+            [PomodoroTypeEnum.SHORT_BREAK]: response.defaultShortBreak,
+            [PomodoroTypeEnum.LONG_BREAK]: response.defaultLongBreak,
+          },
+          alarmSound: {
+            label:
+              response.defaultAlarmSound.charAt(0).toUpperCase() +
+              response.defaultAlarmSound.slice(1),
+            value: response.defaultAlarmSound,
+          },
+        },
+      }));
+    } catch (error) {
+      console.error("Error saving profile:", error);
+    }
+  },
 }));

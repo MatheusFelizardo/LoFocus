@@ -92,10 +92,11 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     if (!session) return;
 
     try {
-      const res = await fetch(`/api/sessions/${session.id}`, {
+      const res = await fetch("/api/sessions", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          sessionId: session.id,
           cycles: session.cycles + 1,
         }),
       });
@@ -118,10 +119,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const res = await fetch(`/api/sessions/${session.id}`, {
+      const res = await fetch("/api/sessions", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isCompleted: true }),
+        body: JSON.stringify({ sessionId: session.id, isCompleted: true }),
       });
 
       if (!res.ok) throw new Error("Failed to finish session");

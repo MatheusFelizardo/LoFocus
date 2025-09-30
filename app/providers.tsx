@@ -5,6 +5,7 @@ import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 
 const theme = createTheme({
   palette: { mode: "light" },
@@ -17,6 +18,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <SessionProvider>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <Toaster position="top-right" />
           {children}
         </ThemeProvider>
       </SessionProvider>

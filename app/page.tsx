@@ -1,7 +1,14 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import { Button, Typography, Stack, Card, CardContent } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Stack,
+  Card,
+  CardContent,
+  Box,
+} from "@mui/material";
 import { useEffect } from "react";
 import Image from "next/image";
 import AccountMenu from "./components/Header";
@@ -10,13 +17,33 @@ import Head from "next/head";
 import Playlist from "./components/Playlist/Playlist";
 import BuyMeACoffee from "./components/BuyMeACoffee";
 import TaskRegister from "./components/TaskRegister";
+import { usePomodoroStore } from "./stores/usePomodoro";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
+  const { isLoading, loadProfile } = usePomodoroStore();
 
-  if (status === "loading") {
+  useEffect(() => {
+    async function loadData() {
+      await loadProfile();
+    }
+
+    loadData();
+  }, []);
+
+  if (status === "loading" || isLoading) {
     return (
       <main className="min-h-dvh flex items-center justify-center p-4">
+        <Box className="absolute top-0 left-0 px-4 py-5">
+          <Image
+            src="/logo.svg"
+            alt="LoFocus logo"
+            width={150}
+            height={50}
+            className="w-[120px]"
+            arial-label="LoFocus Logo"
+          />
+        </Box>
         <Typography variant="h6" color="white">
           Loading...
         </Typography>

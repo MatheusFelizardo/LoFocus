@@ -39,7 +39,6 @@ const Clock = ({ time }: { time: number }) => (
 const Pomodoro = () => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const AMOUNT_BEFORE_LONG_BREAK = 4;
 
   const {
     isLoading,
@@ -56,37 +55,9 @@ const Pomodoro = () => {
     resetExecutionCounter,
     addLog,
     configuration,
-    setConfiguration,
   } = usePomodoroStore();
 
   const { incrementCycle } = useSessionStore();
-
-  useEffect(() => {
-    async function loadTimers() {
-      //   const res = await fetch("/api/timers");
-      //   const data = await res.json();
-      usePomodoroStore.setState({ isLoading: false });
-
-      const config = {
-        timers: {
-          [PomodoroTypeEnum.POMODORO]: 25,
-          [PomodoroTypeEnum.SHORT_BREAK]: 5,
-          [PomodoroTypeEnum.LONG_BREAK]: 15,
-        },
-        longBreakInterval: 4,
-        alarmSound: {
-          label: "Bell",
-          value: "bell",
-        },
-      };
-
-      setConfiguration(config);
-
-      setTimer(config.timers[type]);
-    }
-
-    loadTimers();
-  }, []);
 
   useEffect(() => {
     const typeCopy = {
@@ -109,10 +80,6 @@ const Pomodoro = () => {
       setTimer(configuration.timers[type]);
     }
   }, [configuration]);
-
-  if (isLoading || configuration.timers === null || timer === null) {
-    return <div>Loading...</div>;
-  }
 
   const startTimer = () => {
     if (isLoading || timer === null) return;
@@ -161,7 +128,7 @@ const Pomodoro = () => {
         if (state.type === PomodoroTypeEnum.POMODORO) {
           newExecutionCounter += 1;
           shouldIncrement = true;
-          if (newExecutionCounter < AMOUNT_BEFORE_LONG_BREAK) {
+          if (newExecutionCounter < configuration.longBreakInterval) {
             newType = PomodoroTypeEnum.SHORT_BREAK;
             setValue(1);
           } else {
@@ -185,7 +152,7 @@ const Pomodoro = () => {
       });
 
       if (shouldIncrement) {
-        useSessionStore.getState().incrementCycle();
+        incrementCycle();
       }
     }, 1000);
 
@@ -247,7 +214,7 @@ const Pomodoro = () => {
       initialType === PomodoroTypeEnum.POMODORO
     ) {
       if (newType === PomodoroTypeEnum.SHORT_BREAK) {
-        if (executionCounter + 1 < AMOUNT_BEFORE_LONG_BREAK) {
+        if (executionCounter + 1 < configuration.longBreakInterval) {
           increaseExecutionCounter();
         } else {
           resetExecutionCounter();
@@ -282,13 +249,13 @@ const Pomodoro = () => {
           </Tabs>
 
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <Clock time={timer} />
+            <Clock time={timer || 0} />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            <Clock time={timer} />
+            <Clock time={timer || 0} />
           </TabPanel>
           <TabPanel value={value} index={2} dir={theme.direction}>
-            <Clock time={timer} />
+            <Clock time={timer || 0} />
           </TabPanel>
         </div>
 

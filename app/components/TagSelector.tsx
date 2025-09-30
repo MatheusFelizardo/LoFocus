@@ -30,7 +30,9 @@ export function TagSelector({
         for (const option of newValue) {
           if (typeof option === "string") {
             const newTag = await addTag(option);
-            finalTags.push(newTag);
+            if (newTag) {
+              finalTags.push(newTag as Tag);
+            }
           } else {
             finalTags.push(option);
           }
