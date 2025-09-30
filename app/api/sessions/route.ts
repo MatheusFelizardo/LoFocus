@@ -64,14 +64,14 @@ export async function GET() {
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
-    include: { tags: true },
+    include: { tags: true, pomodoros: true },
   });
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  return NextResponse.json(user.tags);
+  return NextResponse.json(user.pomodoros);
 }
 
 export async function PUT(req: Request) {

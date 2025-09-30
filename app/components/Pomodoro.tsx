@@ -10,10 +10,17 @@ import {
   PomodoroStateEnum,
   PomodoroTypeEnum,
 } from "../stores/usePomodoro";
-import { Button, IconButton, Typography } from "@mui/material";
-import { Pause, PlayArrow, Stop } from "@mui/icons-material";
+import { Box, Button, IconButton, Rating, Typography } from "@mui/material";
+import {
+  Circle,
+  CircleOutlined,
+  Pause,
+  PlayArrow,
+  Stop,
+} from "@mui/icons-material";
 import { BUCKET_URL } from "./Playlist/track";
 import { useSessionStore } from "../stores/useSessionStore";
+import toast from "react-hot-toast";
 
 function a11yProps(index: number) {
   return {
@@ -57,7 +64,7 @@ const Pomodoro = () => {
     configuration,
   } = usePomodoroStore();
 
-  const { incrementCycle } = useSessionStore();
+  const { current, incrementCycle, finishSession } = useSessionStore();
 
   useEffect(() => {
     const typeCopy = {
@@ -91,8 +98,9 @@ const Pomodoro = () => {
       timeLeft: timer,
       activity: type,
     });
+    let isProcessing = false;
 
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       let shouldIncrement = false;
 
       usePomodoroStore.setState((state) => {
@@ -152,7 +160,21 @@ const Pomodoro = () => {
       });
 
       if (shouldIncrement) {
-        incrementCycle();
+        if (isProcessing) return;
+        isProcessing = true;
+
+        try {
+          await incrementCycle();
+
+          if (current && current.cycles + 1 === current.expectedCycles) {
+            await finishSession();
+            toast.success(`Session "${current.title}" completed! 🎉`, {
+              duration: 4000,
+            });
+          }
+        } finally {
+          isProcessing = false;
+        }
       }
     }, 1000);
 
@@ -249,7 +271,23 @@ const Pomodoro = () => {
           </Tabs>
 
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <Clock time={timer || 0} />
+            <Box className="relative">
+              {current && (
+                <Typography className="text-sm text-gray-300 absolute -top-8 left-1/2 -translate-x-1/2">
+                  <Rating
+                    icon={<Circle className="text-gray-400 text-sm" />}
+                    emptyIcon={
+                      <CircleOutlined className="text-gray-400 text-sm" />
+                    }
+                    value={current.cycles}
+                    max={current.expectedCycles}
+                    readOnly
+                    size="small"
+                  />
+                </Typography>
+              )}
+              <Clock time={timer || 0} />
+            </Box>
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
             <Clock time={timer || 0} />

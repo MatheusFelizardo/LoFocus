@@ -68,7 +68,7 @@ const TaskRegister = () => {
       {current ? (
         <Box className="flex items-center gap-4">
           <Typography className="text-sm text-gray-300">
-            {`${current.cycles}|${current.expectedCycles}`} {current.title}
+            {current.title}
           </Typography>
           <Box className="flex gap-1">
             {current?.tagIds?.length > 0 &&

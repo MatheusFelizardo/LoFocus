@@ -30,7 +30,9 @@ type SessionState = {
   ) => Promise<void>;
   incrementCycle: () => Promise<void>;
   finishSession: () => Promise<void>;
+  finishIncompleteSession: (sessionId: string) => Promise<void>;
   resetSession: () => void;
+  continueLastSession: (session: Session) => void;
 };
 
 export const useSessionStore = create<SessionState>((set, get) => ({
@@ -49,6 +51,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     } catch (err: any) {
       set({ error: err.message, isLoading: false });
     }
+  },
+
+  continueLastSession: (session: Session) => {
+    set({ current: session });
   },
 
   startSession: async (data) => {
@@ -128,11 +134,29 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       if (!res.ok) throw new Error("Failed to finish session");
 
       set({
-        current: {
-          ...session,
-          endTime: new Date(),
-          isCompleted: true,
-        },
+        current: null,
+        isLoading: false,
+      });
+
+      get().loadSessions();
+    } catch (err: any) {
+      set({ error: err.message, isLoading: false });
+    }
+  },
+
+  finishIncompleteSession: async (sessionId: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const res = await fetch("/api/sessions", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, isCompleted: true }),
+      });
+
+      if (!res.ok) throw new Error("Failed to finish session");
+
+      set({
+        current: null,
         isLoading: false,
       });
 
