@@ -1,24 +1,13 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
-import {
-  Button,
-  Typography,
-  Stack,
-  Card,
-  CardContent,
-  Box,
-  Backdrop,
-  CircularProgress,
-} from "@mui/material";
+import { useSession } from "next-auth/react";
+import { Box, Backdrop, CircularProgress } from "@mui/material";
 import { useEffect } from "react";
 import Image from "next/image";
 import AccountMenu from "../components/Header";
-import Playlist from "../components/Playlist/Playlist";
-import BuyMeACoffee from "../components/BuyMeACoffee";
-import TaskRegister from "../components/TaskRegister";
 import { useSessionStore } from "../stores/useSessionStore";
 import Link from "next/link";
+import HistoryTable from "../components/HistoryTable";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
@@ -92,7 +81,9 @@ export default function Dashboard() {
           </div>
           <AccountMenu />
         </header>
-        <main className="flex flex-col items-center justify-between px-4 py-2 relative flex-1"></main>
+        <main className="flex flex-col items-center justify-between px-4 py-2 relative flex-1">
+          <HistoryTable history={history} />
+        </main>
       </div>
     </>
   );
