@@ -17,7 +17,10 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <Providers>
-          <div className="min-h-dvh flex flex-col justify-between">
+          <div
+            className="min-h-dvh flex flex-col justify-between transition-all duration-500"
+            style={{ background: "var(--background)" }}
+          >
             <div className="flex-1">{children}</div>
 
             <div className="w-full bg-black">
