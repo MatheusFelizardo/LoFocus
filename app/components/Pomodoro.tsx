@@ -264,6 +264,14 @@ const Pomodoro = () => {
             textColor="inherit"
             variant="fullWidth"
             className="w-full"
+            sx={{
+              borderBottom: 1,
+              borderColor: "divider",
+              "& .MuiTabs-indicator": { backgroundColor: "var(--foreground)" },
+              "& .MuiTab-root": {
+                color: "var(--foreground)",
+              },
+            }}
           >
             <Tab label="Pomodoro" {...a11yProps(0)} />
             <Tab label="Short Break" {...a11yProps(1)} />
@@ -273,11 +281,19 @@ const Pomodoro = () => {
           <TabPanel value={value} index={0} dir={theme.direction}>
             <Box className="relative">
               {current && (
-                <Typography className="text-sm text-gray-300 absolute -top-8 left-1/2 -translate-x-1/2">
+                <Typography className="text-sm absolute -top-8 left-1/2 -translate-x-1/2">
                   <Rating
-                    icon={<Circle className="text-gray-400 text-sm" />}
+                    icon={
+                      <Circle
+                        className="text-sm"
+                        style={{ color: "var(--text-color)" }}
+                      />
+                    }
                     emptyIcon={
-                      <CircleOutlined className="text-gray-400 text-sm" />
+                      <CircleOutlined
+                        className="text-sm"
+                        style={{ color: "var(--text-color)" }}
+                      />
                     }
                     value={current.cycles}
                     max={current.expectedCycles}
@@ -303,18 +319,27 @@ const Pomodoro = () => {
         >
           {status === PomodoroStateEnum.STOPPED ||
           status === PomodoroStateEnum.PAUSED ? (
-            <IconButton className="p-1 text-gray-400" onClick={startTimer}>
+            <IconButton
+              className="p-1"
+              style={{ color: "var(--play-icon)" }}
+              onClick={startTimer}
+            >
               <PlayArrow className="w-20 h-20" />
             </IconButton>
           ) : (
-            <IconButton className="p-1 text-gray-400" onClick={pauseTimer}>
+            <IconButton
+              className="p-1"
+              style={{ color: "var(--pause-icon)" }}
+              onClick={pauseTimer}
+            >
               <Pause className="w-20 h-20" />
             </IconButton>
           )}
 
           {status !== PomodoroStateEnum.STOPPED && (
             <IconButton
-              className="p-1 text-red-400 absolute right-10"
+              className="p-1 absolute right-10"
+              style={{ color: "var(--stop-icon)" }}
               onClick={stopTimer}
             >
               <Stop className="w-12 h-12" />

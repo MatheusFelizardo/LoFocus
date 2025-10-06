@@ -9,10 +9,13 @@ import { useSessionStore } from "./stores/useSessionStore";
 import ContinueLastSession from "./components/ContinueLastSession";
 import Header from "./components/Header";
 import BackdropLoading from "./components/BackdropLoading";
+import { useThemeStore } from "./stores/useThemeStore";
+import { themes } from "./components/Theme/ThemeLibrary";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
   const { isLoading, loadProfile } = usePomodoroStore();
+  const { updateTheme, currentTheme, themeConfig } = useThemeStore();
   const {
     loadSessions,
     isLoading: isLoadingSessions,
@@ -25,6 +28,7 @@ export default function HomePage() {
     }
 
     loadData();
+    updateTheme(currentTheme!);
   }, []);
 
   if (status === "unauthenticated") {
@@ -34,7 +38,7 @@ export default function HomePage() {
     return null;
   }
 
-  if (status === "loading" || isLoading || isLoadingSessions) {
+  if (status === "loading" || isLoading || isLoadingSessions || !themeConfig) {
     return <BackdropLoading />;
   }
 

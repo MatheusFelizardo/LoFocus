@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -67,28 +67,25 @@ model UserProfile {
 }
 
 model PomodoroSession {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id])
   title          String
   focusDuration  Int
   shortBreak     Int
   longBreak      Int
   expectedCycles Int
-  cycles         Int      @default(0)
-  startTime      DateTime @default(now())
+  cycles         Int       @default(0)
+  startTime      DateTime  @default(now())
   endTime        DateTime?
-  isCompleted    Boolean  @default(false)
-
-  tags           Tag[]    @relation("PomodoroTags")
+  isCompleted    Boolean   @default(false)
+  user           User      @relation(fields: [userId], references: [id])
+  tags           Tag[]     @relation("PomodoroTags")
 }
 
 model Tag {
-  id      String             @id @default(cuid())
-  name    String
-  userId  String
-  user    User               @relation(fields: [userId], references: [id])
-
+  id       String            @id @default(cuid())
+  name     String
+  userId   String
+  user     User              @relation(fields: [userId], references: [id])
   sessions PomodoroSession[] @relation("PomodoroTags")
 }
-
