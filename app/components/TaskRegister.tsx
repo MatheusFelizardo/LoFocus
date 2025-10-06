@@ -81,7 +81,6 @@ const TaskRegister = () => {
                   <Chip
                     key={tag?.id}
                     size="small"
-                    variant="outlined"
                     label={tag?.name}
                     className="text-xs "
                     style={{
@@ -98,8 +97,8 @@ const TaskRegister = () => {
           variant="outlined"
           onClick={() => setIsRegistering(true)}
           style={{
-            color: "var(--player-line-color)",
-            borderColor: "var(--player-line-color)",
+            color: "var(--text-color)",
+            borderColor: "var(--text-color)",
           }}
         >
           New Session
