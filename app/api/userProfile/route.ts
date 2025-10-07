@@ -38,6 +38,7 @@ export async function POST(req: Request) {
       defaultLongBreak,
       longBreakInterval,
       defaultAlarmSound,
+      selectedTheme,
     } = body;
 
     const profile = await prisma.userProfile.upsert({
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
         defaultLongBreak,
         longBreakInterval,
         defaultAlarmSound,
+        selectedTheme,
       },
       create: {
         userId: user.id,
@@ -56,6 +58,7 @@ export async function POST(req: Request) {
         defaultLongBreak,
         longBreakInterval,
         defaultAlarmSound,
+        selectedTheme,
       },
     });
     return NextResponse.json(profile, { status: 200 });

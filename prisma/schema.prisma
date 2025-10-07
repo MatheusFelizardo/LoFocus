@@ -4,7 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DIRECT_URL")
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -61,34 +62,32 @@ model UserProfile {
   defaultShortBreak Int      @default(5)
   defaultLongBreak  Int      @default(15)
   longBreakInterval Int      @default(4)
+  selectedTheme     String   @default("midnight")
   defaultAlarmSound String   @default("bell")
   updatedAt         DateTime @updatedAt
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PomodoroSession {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id])
   title          String
   focusDuration  Int
   shortBreak     Int
   longBreak      Int
   expectedCycles Int
-  cycles         Int      @default(0)
-  startTime      DateTime @default(now())
+  cycles         Int       @default(0)
+  startTime      DateTime  @default(now())
   endTime        DateTime?
-  isCompleted    Boolean  @default(false)
-
-  tags           Tag[]    @relation("PomodoroTags")
+  isCompleted    Boolean   @default(false)
+  user           User      @relation(fields: [userId], references: [id])
+  tags           Tag[]     @relation("PomodoroTags")
 }
 
 model Tag {
-  id      String             @id @default(cuid())
-  name    String
-  userId  String
-  user    User               @relation(fields: [userId], references: [id])
-
+  id       String            @id @default(cuid())
+  name     String
+  userId   String
+  user     User              @relation(fields: [userId], references: [id])
   sessions PomodoroSession[] @relation("PomodoroTags")
 }
-

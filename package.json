@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "docker-compose up -d && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "prisma:generate": "npx prisma generate",
+    "db:cli": "docker exec -it lofocus-db-1 psql -U postgres -d postgres"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
@@ -43,3 +45,4 @@
     "schema": "prisma/schema.prisma"
   }
 }
+

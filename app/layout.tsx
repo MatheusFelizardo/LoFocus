@@ -17,10 +17,10 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <Providers>
-          <div className="min-h-dvh flex flex-col justify-between">
+          <div className="min-h-dvh flex flex-col justify-between transition-all duration-500">
             <div className="flex-1">{children}</div>
 
-            <div className="w-full bg-black">
+            <div className="w-full">
               <div className="flex flex-col gap-1 w-full">
                 <Playlist />
                 <BuyMeACoffee />

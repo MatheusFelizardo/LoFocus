@@ -67,7 +67,10 @@ const TaskRegister = () => {
     <>
       {current ? (
         <Box className="flex items-center gap-4">
-          <Typography className="text-sm text-gray-300">
+          <Typography
+            className="text-sm "
+            style={{ color: "var(--text-color)" }}
+          >
             {current.title}
           </Typography>
           <Box className="flex gap-1">
@@ -78,16 +81,26 @@ const TaskRegister = () => {
                   <Chip
                     key={tag?.id}
                     size="small"
-                    variant="outlined"
                     label={tag?.name}
-                    className="text-xs text-gray-500"
+                    className="text-xs "
+                    style={{
+                      color: "var(--text-color)",
+                      borderColor: "var(--text-color)",
+                    }}
                   />
                 );
               })}
           </Box>
         </Box>
       ) : (
-        <Button variant="outlined" onClick={() => setIsRegistering(true)}>
+        <Button
+          variant="outlined"
+          onClick={() => setIsRegistering(true)}
+          style={{
+            color: "var(--text-color)",
+            borderColor: "var(--text-color)",
+          }}
+        >
           New Session
         </Button>
       )}

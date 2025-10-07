@@ -1,32 +1,21 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
-import {
-  Button,
-  Typography,
-  Stack,
-  Card,
-  CardContent,
-  Box,
-  Backdrop,
-  CircularProgress,
-} from "@mui/material";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import Image from "next/image";
-import AccountMenu from "./components/Header";
 import Pomodoro from "./components/Pomodoro";
-import Head from "next/head";
-import Playlist from "./components/Playlist/Playlist";
-import BuyMeACoffee from "./components/BuyMeACoffee";
 import TaskRegister from "./components/TaskRegister";
 import { usePomodoroStore } from "./stores/usePomodoro";
 import { useSessionStore } from "./stores/useSessionStore";
 import ContinueLastSession from "./components/ContinueLastSession";
-import Link from "next/link";
+import Header from "./components/Header";
+import BackdropLoading from "./components/BackdropLoading";
+import { useThemeStore } from "./stores/useThemeStore";
+import { themes } from "./components/Theme/ThemeLibrary";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
-  const { isLoading, loadProfile } = usePomodoroStore();
+  const { isLoading, loadProfile, configuration } = usePomodoroStore();
+  const { updateTheme, themeConfig } = useThemeStore();
   const {
     loadSessions,
     isLoading: isLoadingSessions,
@@ -41,6 +30,12 @@ export default function HomePage() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    if (configuration.selectedTheme) {
+      updateTheme(configuration.selectedTheme);
+    }
+  }, [configuration.selectedTheme]);
+
   if (status === "unauthenticated") {
     if (typeof window !== "undefined") {
       window.location.href = "/auth/signin";
@@ -48,32 +43,8 @@ export default function HomePage() {
     return null;
   }
 
-  if (status === "loading" || isLoading || isLoadingSessions) {
-    return (
-      <main className="flex items-center justify-center p-4">
-        <Box className="absolute top-0 left-0 px-4 py-5">
-          <Link href="/">
-            <Image
-              src="/logo.svg"
-              alt="LoFocus logo"
-              width={150}
-              height={50}
-              className="w-[120px]"
-              arial-label="LoFocus Logo"
-            />
-          </Link>
-        </Box>
-        <Backdrop
-          sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
-          open={true}
-          onClick={() => {
-            return false;
-          }}
-        >
-          <CircularProgress size="30px" color="inherit" />
-        </Backdrop>
-      </main>
-    );
+  if (status === "loading" || isLoading || isLoadingSessions || !themeConfig) {
+    return <BackdropLoading />;
   }
 
   return (
@@ -82,22 +53,7 @@ export default function HomePage() {
         <div className="sr-only">
           <h1>LoFocus — Pomodoro Timer with Lo-Fi Music</h1>
         </div>
-        <header className="flex items-center justify-between p-4 ">
-          <div>
-            <Link href="/">
-              <Image
-                src="/logo.svg"
-                alt="LoFocus logo"
-                width={150}
-                height={50}
-                className="w-[120px]"
-                arial-label="LoFocus Logo"
-              />
-            </Link>
-          </div>
-          <TaskRegister />
-          <AccountMenu />
-        </header>
+        <Header middleContent={<TaskRegister />} />
         <main className="flex flex-col items-center justify-between px-4 py-2 relative flex-1">
           <Pomodoro />
           {history.length > 0 && <ContinueLastSession />}

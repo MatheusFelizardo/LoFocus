@@ -4,6 +4,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --text-color: #171717;
+  --pomodoro-play-icon: #fff;
+  --pomodoro-pause-icon: #fff;
+  --pomodoro-stop-icon: #ef4444;
+  --player-background: #000000;
+  --player-play-icon: #fff;
+  --player-mods-bg-color: #fff;
+  --player-mods-text-color: #000;
+  --player-text-color: #ffffff;
+  --player-line-color: #444444;
+  --player-controls-color: #fff;
 }
 
 @theme inline {

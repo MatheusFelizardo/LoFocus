@@ -33,6 +33,7 @@ export type PomodoroConfiguration = {
     label: string;
     value: string;
   };
+  selectedTheme?: string;
 };
 
 type PomodoroState = {
@@ -96,6 +97,7 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
           },
           longBreakInterval: 4,
           alarmSound: { label: "Bell", value: "bell" },
+          selectedTheme: "midnight",
         };
         await usePomodoroStore.getState().saveProfile(configuration);
         set(() => ({
@@ -119,6 +121,7 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
             data.defaultAlarmSound.slice(1),
           value: data.defaultAlarmSound,
         },
+        selectedTheme: data.selectedTheme || "midnight",
       };
       console.log("Loaded configuration:", configuration);
       set(() => ({
@@ -143,6 +146,7 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
           defaultLongBreak: config.timers[PomodoroTypeEnum.LONG_BREAK],
           longBreakInterval: config.longBreakInterval,
           defaultAlarmSound: config.alarmSound.value,
+          selectedTheme: config.selectedTheme,
         }),
       });
       if (!res.ok) throw new Error("Failed to save profile");
@@ -162,6 +166,7 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
               response.defaultAlarmSound.slice(1),
             value: response.defaultAlarmSound,
           },
+          selectedTheme: response.selectedTheme || "midnight",
         },
       }));
     } catch (error) {
