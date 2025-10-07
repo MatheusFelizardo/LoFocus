@@ -7,18 +7,18 @@ import Slider from "@mui/material/Slider";
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import {
   Pause,
-  PauseCircleOutline,
   PlayArrow,
-  PlayCircleOutline,
   SkipNext,
   SkipPrevious,
   VolumeOff,
   VolumeUp,
 } from "@mui/icons-material";
+import { useThemeStore } from "@/app/stores/useThemeStore";
 
 type TrackType = "calm" | "upbeat";
 
 const Playlist = () => {
+  const { themeConfig } = useThemeStore();
   const [playlistType, setPlaylistType] = useState<TrackType>("calm");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -110,6 +110,8 @@ const Playlist = () => {
       navigator.mediaSession.setActionHandler("nexttrack", playNext);
     }
   }, [currentTrack, duration, playNext, playPrev]);
+
+  if (!themeConfig) return null;
 
   return (
     <div

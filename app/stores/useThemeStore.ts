@@ -27,9 +27,13 @@ export type ThemeState = {
   setIsVideoBackground: (isVideo: boolean) => void;
   contrastColor?: string;
   updateTheme: (themeMachineName: string) => void;
+  isUpdatingTheme: boolean;
+  setIsUpdatingTheme: (isUpdating: boolean) => void;
 };
 
 export const useThemeStore = create<ThemeState>((set) => ({
+  isUpdatingTheme: false,
+  setIsUpdatingTheme: (isUpdating) => set({ isUpdatingTheme: isUpdating }),
   isConfigOpen: false,
   setIsConfigOpen: (isOpen) => set({ isConfigOpen: isOpen }),
   currentTheme: "midnight",
@@ -93,6 +97,7 @@ export const useThemeStore = create<ThemeState>((set) => ({
   isVideoBackground: false,
   setIsVideoBackground: (isVideo) => set({ isVideoBackground: isVideo }),
   updateTheme: (themeMachineName: string) => {
+    console.log("Updating theme to:", themeMachineName);
     const { setThemeConfig } = useThemeStore.getState();
     const theme = themes.find((t) => t.machineName === themeMachineName);
     if (theme) {

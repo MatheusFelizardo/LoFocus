@@ -14,8 +14,8 @@ import { themes } from "./components/Theme/ThemeLibrary";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
-  const { isLoading, loadProfile } = usePomodoroStore();
-  const { updateTheme, currentTheme, themeConfig } = useThemeStore();
+  const { isLoading, loadProfile, configuration } = usePomodoroStore();
+  const { updateTheme, themeConfig } = useThemeStore();
   const {
     loadSessions,
     isLoading: isLoadingSessions,
@@ -28,8 +28,13 @@ export default function HomePage() {
     }
 
     loadData();
-    updateTheme(currentTheme!);
   }, []);
+
+  useEffect(() => {
+    if (configuration.selectedTheme) {
+      updateTheme(configuration.selectedTheme);
+    }
+  }, [configuration.selectedTheme]);
 
   if (status === "unauthenticated") {
     if (typeof window !== "undefined") {

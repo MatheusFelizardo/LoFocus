@@ -5,10 +5,12 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 import Image from "next/image";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Chip, TextField } from "@mui/material";
 import { ThemeConfig, useThemeStore } from "@/app/stores/useThemeStore";
 import { solid } from "./themes/solid";
 import { gradient } from "./themes/gradient";
+import { usePomodoroStore } from "@/app/stores/usePomodoro";
+import MiniScreen from "../MiniScreen";
 
 export type ThemeType = "gradient" | "solid" | "environment" | "video";
 
@@ -24,7 +26,9 @@ export interface Theme {
 export const themes: Theme[] = [...gradient, ...solid];
 
 const ThemeLibrary = () => {
-  const { setThemeConfig, themeConfig } = useThemeStore();
+  const { saveProfile, configuration } = usePomodoroStore();
+  const { isUpdatingTheme, updateTheme, themeConfig, setIsUpdatingTheme } =
+    useThemeStore();
   const [filteredCards, setFilteredCards] = React.useState(themes);
   const typeOptions = Array.from(new Set(themes.map((theme) => theme.type)));
 
@@ -54,11 +58,22 @@ const ThemeLibrary = () => {
           <Card
             key={theme.title}
             data-active={themeConfig === theme.themeConfig ? "" : undefined}
-            className="rounded-none shadow-none border-2 border-white data-[active]:border-black/80  min-w-[150px] max-w-full"
+            // className="rounded-none shadow-none border-2 border-white data-[active]:border-black/80  min-w-[150px] max-w-full"
+            className={`rounded-none shadow-none border-none min-w-[150px] max-w-full ${
+              themeConfig === theme.themeConfig ? "bg-gray-100" : ""
+            }`}
           >
             <CardActionArea
-              onClick={() => {
-                setThemeConfig(theme.themeConfig);
+              onClick={async () => {
+                if (isUpdatingTheme) return;
+
+                setIsUpdatingTheme(true);
+                await saveProfile({
+                  ...configuration,
+                  selectedTheme: theme.machineName,
+                });
+                updateTheme(theme.machineName);
+                setIsUpdatingTheme(false);
               }}
               className="overflow-hidden"
             >
@@ -69,8 +84,13 @@ const ThemeLibrary = () => {
 
                 <Box
                   className="aspect-[12/9]"
-                  style={{ background: theme.themeConfig.background }}
-                ></Box>
+                  style={{
+                    background: theme.themeConfig.background,
+                    opacity: isUpdatingTheme ? 0.6 : 1,
+                  }}
+                >
+                  <MiniScreen theme={theme} />
+                </Box>
               </CardContent>
             </CardActionArea>
           </Card>
