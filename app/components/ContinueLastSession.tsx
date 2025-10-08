@@ -27,8 +27,6 @@ const ContinueLastSession = () => {
   );
   const lastSession = history[history.length - 1];
 
-  console.log("Last session:", lastSession);
-
   const handleClose = async () => {
     if (lastSession.id) {
       await finishIncompleteSession(lastSession.id);

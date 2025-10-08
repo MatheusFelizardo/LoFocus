@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import Pomodoro from "./components/Pomodoro";
+import Pomodoro from "./components/Pomodoro/Pomodoro";
 import TaskRegister from "./components/TaskRegister";
 import { usePomodoroStore } from "./stores/usePomodoro";
 import { useSessionStore } from "./stores/useSessionStore";
@@ -62,4 +62,3 @@ export default function HomePage() {
     </>
   );
 }
-

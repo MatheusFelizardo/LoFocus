@@ -55,10 +55,13 @@ type PomodoroState = {
   setConfiguration: (config: PomodoroConfiguration) => void;
   loadProfile: () => Promise<void>;
   saveProfile: (newConfig: PomodoroConfiguration) => Promise<void>;
+  currentTab: number;
+  setCurrentTab: (currentTab: number) => void;
 };
 
 export const usePomodoroStore = create<PomodoroState>((set) => ({
   isLoading: true,
+  currentTab: 0,
   executionCounter: 0,
   status: PomodoroStateEnum.STOPPED,
   type: PomodoroTypeEnum.POMODORO,
@@ -74,6 +77,7 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
     },
   },
   addLog: (entry) => set((state) => ({ logs: [...state.logs, entry] })),
+  setCurrentTab: (currentTab) => set(() => ({ currentTab })),
   setStatus: (status) => set(() => ({ status })),
   setTimer: (time) => set(() => ({ timer: time * 60 })),
   setType: (type) => set(() => ({ type })),
