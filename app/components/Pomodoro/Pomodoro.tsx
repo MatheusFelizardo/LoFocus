@@ -10,7 +10,7 @@ import {
   PomodoroStateEnum,
   PomodoroTypeEnum,
 } from "../../stores/usePomodoro";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Rating, Typography } from "@mui/material";
 import {
   Circle,
   CircleOutlined,
@@ -43,30 +43,6 @@ const Clock = ({ time }: { time: number }) => (
     <div className="text-9xl">{format(time)}</div>
   </div>
 );
-
-const Circles = ({ current, max }: { current: number; max: number }) => {
-  const circles = [];
-  for (let i = 0; i < max; i++) {
-    if (i < current) {
-      circles.push(
-        <Circle
-          key={i}
-          className="text-sm"
-          style={{ color: "var(--text-color)" }}
-        />
-      );
-    } else {
-      circles.push(
-        <CircleOutlined
-          key={i}
-          className="text-sm"
-          style={{ color: "var(--text-color)" }}
-        />
-      );
-    }
-  }
-  return <span className="flex items-center justify-center">{circles}</span>;
-};
 
 const Pomodoro = () => {
   const theme = useTheme();
@@ -124,9 +100,23 @@ const Pomodoro = () => {
             <Box className="relative">
               {current && (
                 <Typography className="text-sm absolute -top-8 left-1/2 -translate-x-1/2">
-                  <Circles
-                    current={current.cycles}
+                  <Rating
+                    icon={
+                      <Circle
+                        className="text-sm"
+                        style={{ color: "var(--text-color)" }}
+                      />
+                    }
+                    emptyIcon={
+                      <CircleOutlined
+                        className="text-sm"
+                        style={{ color: "var(--text-color)" }}
+                      />
+                    }
+                    value={current.cycles}
                     max={current.expectedCycles}
+                    readOnly
+                    size="small"
                   />
                 </Typography>
               )}

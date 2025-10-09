@@ -34,6 +34,15 @@ const TaskRegister = () => {
     expectedCycles: 4,
   });
 
+  useEffect(() => {
+    setSession((s) => ({
+      ...s,
+      focusDuration: configuration.timers?.[PomodoroTypeEnum.POMODORO],
+      longBreakDuration: configuration.timers?.[PomodoroTypeEnum.LONG_BREAK],
+      shortBreakDuration: configuration.timers?.[PomodoroTypeEnum.SHORT_BREAK],
+    }));
+  }, [configuration]);
+
   const handleSave = async () => {
     const isValid =
       session.title.trim().length > 0 &&
@@ -107,7 +116,20 @@ const TaskRegister = () => {
 
       <Dialog
         open={isRegistering}
-        onClose={() => setIsRegistering(false)}
+        onClose={() => {
+          setIsRegistering(false);
+          setSession({
+            title: "",
+            tags: [] as Tag[],
+            focusDuration: configuration.timers?.[PomodoroTypeEnum.POMODORO],
+            longBreakDuration:
+              configuration.timers?.[PomodoroTypeEnum.LONG_BREAK],
+            shortBreakDuration:
+              configuration.timers?.[PomodoroTypeEnum.SHORT_BREAK],
+            cycles: 0,
+            expectedCycles: 4,
+          });
+        }}
         maxWidth="sm"
         fullWidth
       >

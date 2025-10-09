@@ -6,6 +6,7 @@ import {
 import { toast } from "react-hot-toast";
 import { BUCKET_URL } from "../Playlist/track";
 import { config } from "process";
+import { useSessionStore } from "@/app/stores/useSessionStore";
 
 const playAlarm = () => {
   if (typeof window !== "undefined") {
@@ -17,7 +18,9 @@ const playAlarm = () => {
   }
 };
 
-export const handleTimerEnd = () => {
+export const handleTimerEnd = async () => {
+  const { current, incrementCycle, finishSession } = useSessionStore.getState();
+
   const {
     type: currentType,
     increaseExecutionCounter,
@@ -35,13 +38,20 @@ export const handleTimerEnd = () => {
   });
 
   playAlarm();
-  toast.success(`${currentType} finalizado!`);
 
   if (currentType === PomodoroTypeEnum.POMODORO) {
     increaseExecutionCounter();
 
     const longBreakInterval = configuration.longBreakInterval || 4;
     const newCounter = executionCounter + 1;
+
+    // Increment the session cycle
+    if (current) {
+      await incrementCycle();
+      if (current.cycles + 1 === current.expectedCycles) {
+        await finishSession();
+      }
+    }
 
     if (newCounter % longBreakInterval === 0) {
       handleChange(2); // Long Break
@@ -161,8 +171,6 @@ export const handleChange = (tabIndex: number) => {
     default:
       return;
   }
-
-  console.log("Changing to", newType, "with time", newTime);
 
   setType(newType);
   setTimer(newTime);

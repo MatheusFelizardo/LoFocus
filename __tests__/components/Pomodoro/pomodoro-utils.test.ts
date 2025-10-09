@@ -73,7 +73,6 @@ describe("Pomodoro utils", () => {
     expect(usePomodoroStore.getState().timer).toBe(25 * 60);
     vi.advanceTimersByTime(24 * 60 * 1000);
     const { timer } = usePomodoroStore.getState();
-    console.log("timer", timer);
     expect(timer).toBe(60); // 1 minute left
   });
 
