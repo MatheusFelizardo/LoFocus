@@ -1,3 +1,5 @@
+import { BUCKET_URL } from "@/app/lib/constants";
+
 type Track = {
   id: number;
   title: string;
@@ -5,7 +7,7 @@ type Track = {
   url: string;
   type: "calm" | "upbeat";
 };
-export const BUCKET_URL = "https://media.lofocus.app";
+
 export const tracks: Track[] = [
   {
     id: 1,

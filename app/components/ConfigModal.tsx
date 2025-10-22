@@ -19,13 +19,7 @@ import {
   PomodoroTypeEnum,
   usePomodoroStore,
 } from "../stores/usePomodoro";
-import { BUCKET_URL } from "./Playlist/track";
-
-export const soundOptions = [
-  { label: "Bell", value: "bell" },
-  { label: "Digital Clock", value: "digital-clock" },
-  { label: "Kitchen Timer", value: "kitchen" },
-];
+import { BUCKET_URL, soundOptions } from "@/app/lib/constants";
 
 const ConfigModal = ({
   showConfig,

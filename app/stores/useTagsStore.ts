@@ -1,9 +1,8 @@
 import { create } from "zustand";
+import type { Tag } from "@/app/lib/types";
 
-export type Tag = {
-  id: string;
-  name: string;
-};
+// Re-export for backward compatibility
+export type { Tag };
 
 type TagState = {
   tags: Tag[];

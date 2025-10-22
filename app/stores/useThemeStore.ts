@@ -1,21 +1,9 @@
 import { create } from "zustand";
 import { themes } from "../components/Theme/ThemeLibrary";
+import type { ThemeConfig } from "@/app/lib/types";
 
-export type ThemeConfig = {
-  background: string;
-  foreground: string;
-  textColor?: string;
-  pomodoroPlayIcon?: string;
-  pomodoroPauseIcon?: string;
-  pomodoroStopIcon?: string;
-  playerBackground?: string;
-  playerPlayIcon?: string;
-  playerModsBgColor?: string;
-  playerModsTextColor?: string;
-  playerTextColor?: string;
-  playerLineColor?: string;
-  playerControlsColor?: string;
-};
+// Re-export for backward compatibility
+export type { ThemeConfig };
 
 export type ThemeState = {
   isConfigOpen: boolean;

@@ -20,8 +20,9 @@ import {
   usePomodoroStore,
 } from "../stores/usePomodoro";
 import { useSessionStore } from "../stores/useSessionStore";
-import { BUCKET_URL } from "./Playlist/track";
+import { BUCKET_URL } from "@/app/lib/constants";
 import TabPanel from "./Tabs/TabPanel";
+import { formatTime } from "@/app/lib/utils";
 
 function a11yProps(index: number) {
   return {
@@ -30,17 +31,9 @@ function a11yProps(index: number) {
   };
 }
 
-function format(ms: number) {
-  const m = Math.floor(ms / 60)
-    .toString()
-    .padStart(2, "0");
-  const s = (ms % 60).toString().padStart(2, "0");
-  return `${m}:${s}`;
-}
-
 const Clock = ({ time }: { time: number }) => (
   <div id="regular-timer" className="text-6xl font-mono">
-    <div className="text-9xl">{format(time)}</div>
+    <div className="text-9xl">{formatTime(time)}</div>
   </div>
 );
 
@@ -74,7 +67,7 @@ const Pomodoro = () => {
       [PomodoroTypeEnum.LONG_BREAK]: " 💤 Long Break",
     };
     if (timer != null) {
-      document.title = `${format(timer)} — LoFocus ${typeCopy[type]}`;
+      document.title = `${formatTime(timer)} — LoFocus ${typeCopy[type]}`;
     } else {
       document.title = "LoFocus";
     }

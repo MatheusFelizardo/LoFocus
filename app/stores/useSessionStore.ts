@@ -1,19 +1,8 @@
 import { create } from "zustand";
-import type { Tag } from "./useTagsStore";
+import type { Session, Tag } from "@/app/lib/types";
 
-export type Session = {
-  id?: string;
-  title: string;
-  tagIds: string[];
-  focusDuration: number;
-  shortBreakDuration: number;
-  longBreakDuration: number;
-  cycles: number;
-  expectedCycles: number;
-  startTime: Date | null;
-  endTime: Date | null;
-  isCompleted: boolean;
-};
+// Re-export for backward compatibility
+export type { Session };
 
 type SessionState = {
   current: Session | null;
