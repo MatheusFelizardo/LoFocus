@@ -1,35 +1,32 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
+import { ApiErrors, getAuthenticatedUser } from "@/app/lib/utils";
 
 export async function GET() {
   const session = await auth();
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await getAuthenticatedUser(session);
+
+  if (!user) {
+    return ApiErrors.unauthorized();
   }
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+
+  const userWithProfile = await prisma.user.findUnique({
+    where: { id: user.id },
     include: { profile: true },
   });
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-  const profile = user.profile;
-  return NextResponse.json(profile, { status: 200 });
+
+  return NextResponse.json(userWithProfile?.profile, { status: 200 });
 }
 
 export async function POST(req: Request) {
   const session = await auth();
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    include: { profile: true },
-  });
+  const user = await getAuthenticatedUser(session);
+
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    return ApiErrors.unauthorized();
   }
+
   try {
     const body = await req.json();
     const {
@@ -64,9 +61,6 @@ export async function POST(req: Request) {
     return NextResponse.json(profile, { status: 200 });
   } catch (err) {
     console.error("Error updating profile:", err);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+    return ApiErrors.internalError();
   }
 }
