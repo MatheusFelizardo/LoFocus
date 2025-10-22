@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     console.error(err);
     return NextResponse.json(
       { error: "Failed to create tag" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -114,7 +114,7 @@ export async function PUT(req: Request) {
     console.error(err);
     return NextResponse.json(
       { error: "Failed to update session" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -144,7 +144,7 @@ export async function DELETE(req: Request) {
     console.error(err);
     return NextResponse.json(
       { error: "Failed to delete session" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

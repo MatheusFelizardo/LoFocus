@@ -32,7 +32,7 @@ export const useTagStore = create<TagState>((set, get) => ({
 
   addTag: async (name: string) => {
     const existing = get().tags.find(
-      (tag) => tag.name.toLowerCase() === name.toLowerCase()
+      (tag) => tag.name.toLowerCase() === name.toLowerCase(),
     );
     if (existing) return existing;
 
@@ -45,9 +45,11 @@ export const useTagStore = create<TagState>((set, get) => ({
 
       if (res.status === 409) {
         await get().fetchTags();
-        return get().tags.find(
-          (tag) => tag.name.toLowerCase() === name.toLowerCase()
-        )!;
+        const existingTag = get().tags.find(
+          (tag) => tag.name.toLowerCase() === name.toLowerCase(),
+        );
+        if (!existingTag) throw new Error("Tag not found after conflict");
+        return existingTag;
       }
 
       if (!res.ok) throw new Error("Failed to create tag");

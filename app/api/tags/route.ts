@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     if (!body.name || typeof body.name !== "string") {
       return NextResponse.json(
         { error: "Tag name is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -35,18 +35,18 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(tag, { status: 201 });
-  } catch (err: any) {
-    if (err.code === "P2002") {
+  } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === "P2002") {
       return NextResponse.json(
         { error: "Tag already exists" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
     console.error("Error creating tag:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

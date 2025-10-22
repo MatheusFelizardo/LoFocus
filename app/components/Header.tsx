@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import TaskRegister from "./TaskRegister";
+import type React from "react";
 import AccountMenu from "./AccountMenu";
 
 type HeaderProps = {

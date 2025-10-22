@@ -1,22 +1,22 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
   Typography,
-  Chip,
 } from "@mui/material";
-import { PomodoroTypeEnum, usePomodoroStore } from "../stores/usePomodoro";
-import { TagSelector } from "./TagSelector";
-import { useSessionStore } from "../stores/useSessionStore";
-import { Tag, useTagStore } from "../stores/useTagsStore";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { PomodoroTypeEnum, usePomodoroStore } from "../stores/usePomodoro";
+import { useSessionStore } from "../stores/useSessionStore";
+import { type Tag, useTagStore } from "../stores/useTagsStore";
+import { TagSelector } from "./TagSelector";
 
 const TaskRegister = () => {
   const { configuration } = usePomodoroStore();
@@ -146,7 +146,7 @@ const TaskRegister = () => {
                 onChange={(e) =>
                   setSession({
                     ...session,
-                    focusDuration: parseInt(e.target.value),
+                    focusDuration: parseInt(e.target.value, 10),
                   })
                 }
               />
@@ -159,7 +159,7 @@ const TaskRegister = () => {
                 onChange={(e) =>
                   setSession({
                     ...session,
-                    shortBreakDuration: parseInt(e.target.value),
+                    shortBreakDuration: parseInt(e.target.value, 10),
                   })
                 }
               />
@@ -172,7 +172,7 @@ const TaskRegister = () => {
                 onChange={(e) =>
                   setSession({
                     ...session,
-                    longBreakDuration: parseInt(e.target.value),
+                    longBreakDuration: parseInt(e.target.value, 10),
                   })
                 }
               />
@@ -185,7 +185,7 @@ const TaskRegister = () => {
                 onChange={(e) =>
                   setSession({
                     ...session,
-                    expectedCycles: parseInt(e.target.value),
+                    expectedCycles: parseInt(e.target.value, 10),
                   })
                 }
               />

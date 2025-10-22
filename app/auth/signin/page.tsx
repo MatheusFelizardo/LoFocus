@@ -1,17 +1,17 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import GoogleIcon from "@mui/icons-material/Google";
 import {
+  Button,
   Card,
   CardContent,
-  Typography,
-  Stack,
-  Button,
   Divider,
+  Stack,
+  Typography,
 } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
-import GitHubIcon from "@mui/icons-material/GitHub";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 export default function SignInPage() {
   return (

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Tag } from "./useTagsStore";
+import type { Tag } from "./useTagsStore";
 
 export type Session = {
   id?: string;
@@ -26,7 +26,7 @@ type SessionState = {
     data: Omit<
       Session,
       "id" | "cycles" | "startTime" | "endTime" | "isCompleted"
-    >
+    >,
   ) => Promise<void>;
   incrementCycle: () => Promise<void>;
   finishSession: () => Promise<void>;
@@ -48,8 +48,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       if (!res.ok) throw new Error("Failed to load sessions");
       const data: Session[] = await res.json();
       set({ history: data, isLoading: false });
-    } catch (err: any) {
-      set({ error: err.message, isLoading: false });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to load sessions";
+      set({ error: message, isLoading: false });
     }
   },
 
@@ -88,8 +89,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         },
         isLoading: false,
       });
-    } catch (err: any) {
-      set({ error: err.message, isLoading: false });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to create session";
+      set({ error: message, isLoading: false });
     }
   },
 
@@ -139,8 +141,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       });
 
       get().loadSessions();
-    } catch (err: any) {
-      set({ error: err.message, isLoading: false });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to finish session";
+      set({ error: message, isLoading: false });
     }
   },
 
@@ -161,8 +164,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       });
 
       get().loadSessions();
-    } catch (err: any) {
-      set({ error: err.message, isLoading: false });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to finish incomplete session";
+      set({ error: message, isLoading: false });
     }
   },
 

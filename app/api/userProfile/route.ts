@@ -62,11 +62,11 @@ export async function POST(req: Request) {
       },
     });
     return NextResponse.json(profile, { status: 200 });
-  } catch (err: any) {
+  } catch (err) {
     console.error("Error updating profile:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

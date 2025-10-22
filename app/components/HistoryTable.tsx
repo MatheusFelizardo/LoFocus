@@ -1,6 +1,6 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box, Chip } from "@mui/material";
-import { Session } from "../stores/useSessionStore";
+import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import type { Session } from "../stores/useSessionStore";
 
 function HistoryTable({ history }: { history: Session[] }) {
   console.log("Rendering HistoryTable with history:", history);

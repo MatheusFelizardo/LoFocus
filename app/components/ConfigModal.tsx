@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { InfoOutline, PlayArrow, Stop, Timer } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -7,28 +7,19 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  InputLabel,
   MenuItem,
-  Select,
   TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useSession } from "next-auth/react";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 import {
-  InfoOutline,
-  Pause,
-  PlayArrow,
-  Stop,
-  Timer,
-} from "@mui/icons-material";
-import {
-  PomodoroConfiguration,
+  type PomodoroConfiguration,
   PomodoroTypeEnum,
   usePomodoroStore,
 } from "../stores/usePomodoro";
 import { BUCKET_URL } from "./Playlist/track";
-import toast from "react-hot-toast";
 
 export const soundOptions = [
   { label: "Bell", value: "bell" },
@@ -157,7 +148,7 @@ const ConfigModal = ({
             value={newConfig.alarmSound.value}
             onChange={(e) => {
               const selected = soundOptions.find(
-                (opt) => opt.value === e.target.value
+                (opt) => opt.value === e.target.value,
               );
               console.log(selected);
               console.log(e.target.value);
@@ -175,7 +166,7 @@ const ConfigModal = ({
               select: {
                 renderValue: (selected) => {
                   const option = soundOptions.find(
-                    (opt) => opt.value === selected
+                    (opt) => opt.value === selected,
                   );
                   return option ? option.label : "";
                 },
@@ -206,7 +197,7 @@ const ConfigModal = ({
 
                       if (audio) audio.pause();
                       const a = new Audio(
-                        `${BUCKET_URL}/alarm/${option.value}.mp3`
+                        `${BUCKET_URL}/alarm/${option.value}.mp3`,
                       );
                       a.play();
 

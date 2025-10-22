@@ -1,6 +1,9 @@
-import Image from "next/image";
-import React from "react";
-import { useSession } from "next-auth/react";
+import {
+  PlayArrow,
+  SkipNext,
+  SkipPrevious,
+  VolumeOff,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -11,13 +14,9 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import {
-  PlayArrow,
-  SkipNext,
-  SkipPrevious,
-  VolumeOff,
-} from "@mui/icons-material";
-import { Theme } from "./Theme/ThemeLibrary";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import type { Theme } from "./Theme/ThemeLibrary";
 
 const MiniScreen = ({ theme }: { theme: Theme }) => {
   const { data: session } = useSession();
@@ -38,7 +37,7 @@ const MiniScreen = ({ theme }: { theme: Theme }) => {
           </div>
 
           <Image
-            src={session!.user!.image!}
+            src={session?.user?.image!}
             alt="User Avatar"
             width={16}
             height={16}

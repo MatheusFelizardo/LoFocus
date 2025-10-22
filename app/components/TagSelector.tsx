@@ -1,6 +1,6 @@
-import { Autocomplete, TextField, Chip } from "@mui/material";
+import { Autocomplete, Chip, TextField } from "@mui/material";
 import { useEffect } from "react";
-import { Tag, useTagStore } from "../stores/useTagsStore";
+import { type Tag, useTagStore } from "../stores/useTagsStore";
 
 export function TagSelector({
   value,

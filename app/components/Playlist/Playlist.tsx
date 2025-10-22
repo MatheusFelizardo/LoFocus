@@ -1,10 +1,5 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import Howler from "react-howler";
-import { tracks } from "./track";
-import Slider from "@mui/material/Slider";
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import {
   Pause,
   PlayArrow,
@@ -13,7 +8,12 @@ import {
   VolumeOff,
   VolumeUp,
 } from "@mui/icons-material";
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import Slider from "@mui/material/Slider";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import Howler from "react-howler";
 import { useThemeStore } from "@/app/stores/useThemeStore";
+import { tracks } from "./track";
 
 type TrackType = "calm" | "upbeat";
 
@@ -42,7 +42,7 @@ const Playlist = () => {
         });
       }
     }
-  }, [currentTrack]);
+  }, []);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -61,19 +61,19 @@ const Playlist = () => {
     return () => clearInterval(interval);
   }, [playing]);
 
-  const playNext = () => {
+  const playNext = useCallback(() => {
     const list = tracks.filter((t) => t.type === playlistType);
     setSeek(0);
     setProgress(0);
     setCurrentIndex((prev) => (prev + 1) % list.length);
-  };
+  }, [playlistType]);
 
-  const playPrev = () => {
+  const playPrev = useCallback(() => {
     const list = tracks.filter((t) => t.type === playlistType);
     setSeek(0);
     setProgress(0);
     setCurrentIndex((prev) => (prev - 1 + list.length) % list.length);
-  };
+  }, [playlistType]);
 
   useEffect(() => {
     if ("mediaSession" in navigator && currentTrack) {

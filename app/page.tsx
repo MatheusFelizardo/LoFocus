@@ -2,15 +2,14 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import BackdropLoading from "./components/BackdropLoading";
+import ContinueLastSession from "./components/ContinueLastSession";
+import Header from "./components/Header";
 import Pomodoro from "./components/Pomodoro";
 import TaskRegister from "./components/TaskRegister";
 import { usePomodoroStore } from "./stores/usePomodoro";
 import { useSessionStore } from "./stores/useSessionStore";
-import ContinueLastSession from "./components/ContinueLastSession";
-import Header from "./components/Header";
-import BackdropLoading from "./components/BackdropLoading";
 import { useThemeStore } from "./stores/useThemeStore";
-import { themes } from "./components/Theme/ThemeLibrary";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
@@ -28,13 +27,13 @@ export default function HomePage() {
     }
 
     loadData();
-  }, []);
+  }, [loadProfile, loadSessions]);
 
   useEffect(() => {
     if (configuration.selectedTheme) {
       updateTheme(configuration.selectedTheme);
     }
-  }, [configuration.selectedTheme]);
+  }, [configuration.selectedTheme, updateTheme]);
 
   if (status === "unauthenticated") {
     if (typeof window !== "undefined") {
@@ -48,18 +47,15 @@ export default function HomePage() {
   }
 
   return (
-    <>
-      <div className="lofocus flex flex-col">
-        <div className="sr-only">
-          <h1>LoFocus — Pomodoro Timer with Lo-Fi Music</h1>
-        </div>
-        <Header middleContent={<TaskRegister />} />
-        <main className="flex flex-col items-center justify-between px-4 py-2 relative flex-1">
-          <Pomodoro />
-          {history.length > 0 && <ContinueLastSession />}
-        </main>
+    <div className="lofocus flex flex-col">
+      <div className="sr-only">
+        <h1>LoFocus — Pomodoro Timer with Lo-Fi Music</h1>
       </div>
-    </>
+      <Header middleContent={<TaskRegister />} />
+      <main className="flex flex-col items-center justify-between px-4 py-2 relative flex-1">
+        <Pomodoro />
+        {history.length > 0 && <ContinueLastSession />}
+      </main>
+    </div>
   );
 }
-

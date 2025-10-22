@@ -1,22 +1,20 @@
-import * as React from "react";
+import { ColorLens, History } from "@mui/icons-material";
+import Logout from "@mui/icons-material/Logout";
+import Settings from "@mui/icons-material/Settings";
 import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
-import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import ConfigModal from "./ConfigModal";
-import { usePomodoroStore } from "../stores/usePomodoro";
-import { ColorLens, History } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import ThemeConfig from "./Theme/ThemeConfig";
+import { signOut, useSession } from "next-auth/react";
+import * as React from "react";
+import { usePomodoroStore } from "../stores/usePomodoro";
 import { useThemeStore } from "../stores/useThemeStore";
+import ConfigModal from "./ConfigModal";
+import ThemeConfig from "./Theme/ThemeConfig";
 
 const CustomAvatar = () => {
   const { data: session } = useSession();
@@ -39,7 +37,6 @@ const CustomAvatar = () => {
 
 export default function AccountMenu() {
   const router = useRouter();
-  const { data: session, status } = useSession();
   const { isLoading } = usePomodoroStore();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
