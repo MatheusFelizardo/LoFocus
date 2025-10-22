@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { themes } from "../components/Theme/ThemeLibrary";
 import type { ThemeConfig } from "@/app/lib/types";
+import { themes } from "../components/Theme/ThemeLibrary";
 
 // Re-export for backward compatibility
 export type { ThemeConfig };
