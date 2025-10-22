@@ -1,10 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { CssBaseline } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { SessionProvider } from "next-auth/react";
+import type * as React from "react";
 import { Toaster } from "react-hot-toast";
 
 const theme = createTheme({

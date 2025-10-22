@@ -1,16 +1,15 @@
-import React from "react";
+import { Autocomplete, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import CardActionArea from "@mui/material/CardActionArea";
-import Image from "next/image";
-import { Autocomplete, Chip, TextField } from "@mui/material";
-import { ThemeConfig, useThemeStore } from "@/app/stores/useThemeStore";
-import { solid } from "./themes/solid";
-import { gradient } from "./themes/gradient";
+import React from "react";
 import { usePomodoroStore } from "@/app/stores/usePomodoro";
+import { type ThemeConfig, useThemeStore } from "@/app/stores/useThemeStore";
 import MiniScreen from "../MiniScreen";
+import { gradient } from "./themes/gradient";
+import { solid } from "./themes/solid";
 
 export type ThemeType = "gradient" | "solid" | "environment" | "video";
 
@@ -38,9 +37,9 @@ const ThemeLibrary = () => {
       <Autocomplete
         freeSolo
         options={typeOptions}
-        onInputChange={(event, newInputValue) => {
+        onInputChange={(_event, newInputValue) => {
           const filtered = themes.filter((theme) =>
-            theme.type.toLowerCase().includes(newInputValue.toLowerCase())
+            theme.type.toLowerCase().includes(newInputValue.toLowerCase()),
           );
           setFilteredCards(filtered);
         }}
@@ -54,7 +53,7 @@ const ThemeLibrary = () => {
         )}
       />
       <Box className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
-        {filteredCards.map((theme, index) => (
+        {filteredCards.map((theme, _index) => (
           <Card
             key={theme.title}
             data-active={themeConfig === theme.themeConfig ? "" : undefined}

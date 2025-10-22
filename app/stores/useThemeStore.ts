@@ -1,21 +1,9 @@
 import { create } from "zustand";
+import type { ThemeConfig } from "@/app/lib/types";
 import { themes } from "../components/Theme/ThemeLibrary";
 
-export type ThemeConfig = {
-  background: string;
-  foreground: string;
-  textColor?: string;
-  pomodoroPlayIcon?: string;
-  pomodoroPauseIcon?: string;
-  pomodoroStopIcon?: string;
-  playerBackground?: string;
-  playerPlayIcon?: string;
-  playerModsBgColor?: string;
-  playerModsTextColor?: string;
-  playerTextColor?: string;
-  playerLineColor?: string;
-  playerControlsColor?: string;
-};
+// Re-export for backward compatibility
+export type { ThemeConfig };
 
 export type ThemeState = {
   isConfigOpen: boolean;
@@ -56,22 +44,22 @@ export const useThemeStore = create<ThemeState>((set) => ({
     if (themeConfig.playerBackground)
       root.style.setProperty(
         "--player-background",
-        themeConfig.playerBackground
+        themeConfig.playerBackground,
       );
     if (themeConfig.playerTextColor)
       root.style.setProperty(
         "--player-text-color",
-        themeConfig.playerTextColor
+        themeConfig.playerTextColor,
       );
     if (themeConfig.playerLineColor)
       root.style.setProperty(
         "--player-line-color",
-        themeConfig.playerLineColor
+        themeConfig.playerLineColor,
       );
     if (themeConfig.playerControlsColor)
       root.style.setProperty(
         "--player-controls-color",
-        themeConfig.playerControlsColor
+        themeConfig.playerControlsColor,
       );
     if (themeConfig.pomodoroPlayIcon)
       root.style.setProperty("--play-icon", themeConfig.pomodoroPlayIcon);
@@ -82,12 +70,12 @@ export const useThemeStore = create<ThemeState>((set) => ({
     if (themeConfig.playerModsBgColor)
       root.style.setProperty(
         "--player-mods-bg-color",
-        themeConfig.playerModsBgColor
+        themeConfig.playerModsBgColor,
       );
     if (themeConfig.playerModsTextColor)
       root.style.setProperty(
         "--player-mods-text-color",
-        themeConfig.playerModsTextColor
+        themeConfig.playerModsTextColor,
       );
     if (themeConfig.playerPlayIcon)
       root.style.setProperty("--player-play-icon", themeConfig.playerPlayIcon);

@@ -1,40 +1,19 @@
 import { create } from "zustand";
+import type { LogEntry, PomodoroConfiguration } from "@/app/lib/types";
+import {
+  PomodoroStateEnum,
+  PomodoroTypeEnum,
+} from "@/app/lib/types";
+import {
+  DEFAULT_ALARM_SOUND,
+  DEFAULT_LONG_BREAK_INTERVAL,
+  DEFAULT_POMODORO_TIMERS,
+  DEFAULT_THEME,
+} from "@/app/lib/constants";
 
-export enum PomodoroStateEnum {
-  SHORT_BREAK = "shortBreak",
-  LONG_BREAK = "longBreak",
-  PLAYING = "playing",
-  PAUSED = "paused",
-  STOPPED = "stopped",
-  FINISHED = "finished",
-}
-
-export enum PomodoroTypeEnum {
-  POMODORO = "pomodoro",
-  SHORT_BREAK = "shortBreak",
-  LONG_BREAK = "longBreak",
-}
-
-export type LogEntry = {
-  action: PomodoroStateEnum;
-  timestamp: Date;
-  timeLeft: number;
-  activity: PomodoroTypeEnum;
-};
-
-export type PomodoroConfiguration = {
-  timers: {
-    [PomodoroTypeEnum.POMODORO]: number;
-    [PomodoroTypeEnum.SHORT_BREAK]: number;
-    [PomodoroTypeEnum.LONG_BREAK]: number;
-  } | null;
-  longBreakInterval: number;
-  alarmSound: {
-    label: string;
-    value: string;
-  };
-  selectedTheme?: string;
-};
+// Re-export for backward compatibility
+export { PomodoroStateEnum, PomodoroTypeEnum };
+export type { LogEntry, PomodoroConfiguration };
 
 type PomodoroState = {
   executionCounter: number;
@@ -67,11 +46,8 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
   logs: [],
   configuration: {
     timers: null,
-    longBreakInterval: 4,
-    alarmSound: {
-      label: "Bell",
-      value: "bell",
-    },
+    longBreakInterval: DEFAULT_LONG_BREAK_INTERVAL,
+    alarmSound: DEFAULT_ALARM_SOUND,
   },
   addLog: (entry) => set((state) => ({ logs: [...state.logs, entry] })),
   setStatus: (status) => set(() => ({ status })),
@@ -90,19 +66,15 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
 
       if (!data) {
         const configuration = {
-          timers: {
-            [PomodoroTypeEnum.POMODORO]: 25,
-            [PomodoroTypeEnum.SHORT_BREAK]: 5,
-            [PomodoroTypeEnum.LONG_BREAK]: 15,
-          },
-          longBreakInterval: 4,
-          alarmSound: { label: "Bell", value: "bell" },
-          selectedTheme: "midnight",
+          timers: DEFAULT_POMODORO_TIMERS,
+          longBreakInterval: DEFAULT_LONG_BREAK_INTERVAL,
+          alarmSound: DEFAULT_ALARM_SOUND,
+          selectedTheme: DEFAULT_THEME,
         };
         await usePomodoroStore.getState().saveProfile(configuration);
         set(() => ({
           configuration,
-          timer: 25 * 60,
+          timer: DEFAULT_POMODORO_TIMERS[PomodoroTypeEnum.POMODORO] * 60,
           isLoading: false,
         }));
         return;
@@ -121,7 +93,7 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
             data.defaultAlarmSound.slice(1),
           value: data.defaultAlarmSound,
         },
-        selectedTheme: data.selectedTheme || "midnight",
+        selectedTheme: data.selectedTheme || DEFAULT_THEME,
       };
       console.log("Loaded configuration:", configuration);
       set(() => ({
@@ -166,7 +138,7 @@ export const usePomodoroStore = create<PomodoroState>((set) => ({
               response.defaultAlarmSound.slice(1),
             value: response.defaultAlarmSound,
           },
-          selectedTheme: response.selectedTheme || "midnight",
+          selectedTheme: response.selectedTheme || DEFAULT_THEME,
         },
       }));
     } catch (error) {

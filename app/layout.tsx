@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Providers from "./providers";
 import "./globals.css";
-import Playlist from "./components/Playlist/Playlist";
 import BuyMeACoffee from "./components/BuyMeACoffee";
+import Playlist from "./components/Playlist/Playlist";
 
 export const metadata: Metadata = {
   /* ... */
@@ -32,4 +32,3 @@ export default function RootLayout({
     </html>
   );
 }
-

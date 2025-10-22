@@ -1,11 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Box, Typography, Drawer, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Drawer, IconButton, Typography } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 
 const BuyMeACoffee = () => {
   const [open, setOpen] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+    sessionStorage.setItem("buyMeACoffeeDismissed", "true");
+  }, []);
 
   useEffect(() => {
     const dismissed = sessionStorage.getItem("buyMeACoffeeDismissed");
@@ -16,12 +21,7 @@ const BuyMeACoffee = () => {
       }, 20000);
       return () => clearTimeout(timer);
     }
-  }, []);
-
-  const handleClose = () => {
-    setOpen(false);
-    sessionStorage.setItem("buyMeACoffeeDismissed", "true");
-  };
+  }, [handleClose]);
 
   return (
     <Drawer

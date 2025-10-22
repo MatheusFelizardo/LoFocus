@@ -1,4 +1,4 @@
-import { Theme, ThemeType } from "../ThemeLibrary";
+import type { Theme } from "../ThemeLibrary";
 
 export const gradient: Theme[] = [
   {

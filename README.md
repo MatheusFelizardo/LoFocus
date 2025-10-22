@@ -97,20 +97,49 @@ npm run dev
 
 ## 📂 Project Structure
 
-This project follows the next pages structure
+This project follows Next.js App Router structure with organized folders for better maintainability:
 
 ```
 lofocus/
 ├── prisma/
-│   └── schema.prisma
+│   └── schema.prisma          # Database schema
 ├── app/
-│   ├── api/
-│   │   └── auth/[...nextauth]/route.ts   # Auth.js config
-│   ├── auth                    # Auth pages
-│   └── other-pages
+│   ├── api/                   # API routes
+│   │   ├── auth/              # NextAuth.js configuration
+│   │   ├── sessions/          # Session CRUD endpoints
+│   │   ├── tags/              # Tags CRUD endpoints
+│   │   └── userProfile/       # User profile endpoints
+│   ├── components/            # React components
+│   │   ├── Theme/             # Theme configuration components
+│   │   ├── Playlist/          # Music player components
+│   │   └── ...
+│   ├── stores/                # Zustand state management
+│   │   ├── usePomodoro.ts     # Pomodoro timer state
+│   │   ├── useSessionStore.ts # Session management
+│   │   ├── useTagsStore.ts    # Tags management
+│   │   └── useThemeStore.ts   # Theme configuration
+│   ├── lib/                   # Shared utilities
+│   │   ├── types/             # TypeScript type definitions
+│   │   ├── constants/         # Application constants
+│   │   ├── utils/             # Helper functions
+│   │   ├── auth.ts            # Authentication configuration
+│   │   └── db.ts              # Prisma client
+│   ├── auth/                  # Authentication pages
+│   ├── dashboard/             # Dashboard page
+│   ├── layout.tsx             # Root layout
+│   └── page.tsx               # Home page
+├── public/                    # Static assets
 ├── package.json
-└── .env
+└── .env                       # Environment variables
 ```
+
+### Key Folders
+
+- **`app/lib/types/`** - Centralized TypeScript type definitions
+- **`app/lib/constants/`** - Application-wide constants (URLs, defaults, etc.)
+- **`app/lib/utils/`** - Reusable utility functions (time formatting, API helpers)
+- **`app/stores/`** - Zustand stores for state management
+- **`app/components/`** - React components organized by feature
 
 ---
 

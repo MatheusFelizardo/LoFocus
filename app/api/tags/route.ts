@@ -1,30 +1,21 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
+import { ApiErrors, getAuthenticatedUser } from "@/app/lib/utils";
 
 export async function POST(req: Request) {
   const session = await auth();
+  const user = await getAuthenticatedUser(session);
 
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!user) {
+    return ApiErrors.unauthorized();
   }
 
   try {
     const body = await req.json();
 
     if (!body.name || typeof body.name !== "string") {
-      return NextResponse.json(
-        { error: "Tag name is required" },
-        { status: 400 }
-      );
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return ApiErrors.badRequest("Tag name is required");
     }
 
     const tag = await prisma.tag.create({
@@ -35,37 +26,28 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(tag, { status: 201 });
-  } catch (err: any) {
-    if (err.code === "P2002") {
-      return NextResponse.json(
-        { error: "Tag already exists" },
-        { status: 409 }
-      );
+  } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === "P2002") {
+      return ApiErrors.conflict("Tag already exists");
     }
 
     console.error("Error creating tag:", err);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return ApiErrors.internalError();
   }
 }
 
 export async function GET() {
   const session = await auth();
+  const user = await getAuthenticatedUser(session);
 
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!user) {
+    return ApiErrors.unauthorized();
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+  const userWithTags = await prisma.user.findUnique({
+    where: { id: user.id },
     include: { tags: true },
   });
 
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(user.tags);
+  return NextResponse.json(userWithTags?.tags || []);
 }
